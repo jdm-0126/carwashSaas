@@ -1,0 +1,371 @@
+[debug] [2026-04-23T03:42:17.227Z] ----------------------------------------------------------------------
+[debug] [2026-04-23T03:42:17.233Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2026-04-23T03:42:17.234Z] CLI Version:   15.15.0
+[debug] [2026-04-23T03:42:17.234Z] Platform:      win32
+[debug] [2026-04-23T03:42:17.234Z] Node Version:  v25.8.1
+[debug] [2026-04-23T03:42:17.236Z] Time:          Thu Apr 23 2026 11:42:17 GMT+0800 (China Standard Time)
+[debug] [2026-04-23T03:42:17.238Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-23T03:42:21.389Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-23T03:42:21.390Z] > authorizing via signed-in user (letsbeedevjoseph@gmail.com)
+[debug] [2026-04-23T03:42:21.390Z] [iam] checking project carwash-saas-da4b2 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2026-04-23T03:42:21.392Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:21.393Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:21.394Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions [none]
+[debug] [2026-04-23T03:42:21.395Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:42:21.395Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2026-04-23T03:42:22.799Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions 200
+[debug] [2026-04-23T03:42:22.799Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2026-04-23T03:42:22.800Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:22.800Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:22.800Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/carwash-saas-da4b2/serviceAccounts/carwash-saas-da4b2@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2026-04-23T03:42:22.800Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/carwash-saas-da4b2/serviceAccounts/carwash-saas-da4b2@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2026-04-23T03:42:25.270Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/carwash-saas-da4b2/serviceAccounts/carwash-saas-da4b2@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2026-04-23T03:42:25.270Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/carwash-saas-da4b2/serviceAccounts/carwash-saas-da4b2@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'carwash-saas-da4b2'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build
+[info] +  functions: Finished running predeploy script. 
+[debug] [2026-04-23T03:42:37.737Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:37.738Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:37.738Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2 [none]
+[debug] [2026-04-23T03:42:38.972Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2 200
+[debug] [2026-04-23T03:42:38.972Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2 {"projectNumber":"455006204030","projectId":"carwash-saas-da4b2","lifecycleState":"ACTIVE","name":"carwash-saas","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-04-23T02:35:19.340Z"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2026-04-23T03:42:38.979Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:38.980Z] Checked if tokens are valid: true, expires at: 1776918506164
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2026-04-23T03:42:38.981Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:38.981Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:38.981Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com [none]
+[debug] [2026-04-23T03:42:38.981Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:42:38.983Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com [none]
+[debug] [2026-04-23T03:42:38.983Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:42:40.556Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com 200
+[debug] [2026-04-23T03:42:40.556Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com [omitted]
+[warn] !  artifactregistry: missing required API artifactregistry.googleapis.com. Enabling now... 
+[debug] [2026-04-23T03:42:40.557Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:40.557Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:40.558Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com:enable [none]
+[debug] [2026-04-23T03:42:40.558Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com:enable  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:42:40.691Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com 200
+[debug] [2026-04-23T03:42:40.691Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com [omitted]
+[warn] !  functions: missing required API cloudbuild.googleapis.com. Enabling now... 
+[debug] [2026-04-23T03:42:40.691Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:40.691Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:40.692Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com:enable [none]
+[debug] [2026-04-23T03:42:40.692Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com:enable  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:42:42.175Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com:enable 200
+[debug] [2026-04-23T03:42:42.175Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/artifactregistry.googleapis.com:enable [omitted]
+[debug] [2026-04-23T03:42:42.218Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com:enable 200
+[debug] [2026-04-23T03:42:42.219Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/cloudbuild.googleapis.com:enable [omitted]
+[debug] [2026-04-23T03:42:52.239Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:52.239Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:42:52.239Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/carwash-saas-da4b2/adminSdkConfig [none]
+[debug] [2026-04-23T03:42:53.720Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/carwash-saas-da4b2/adminSdkConfig 200
+[debug] [2026-04-23T03:42:53.721Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/carwash-saas-da4b2/adminSdkConfig {"projectId":"carwash-saas-da4b2","storageBucket":"carwash-saas-da4b2.firebasestorage.app"}
+[debug] [2026-04-23T03:42:53.724Z] Validating nodejs source
+[debug] [2026-04-23T03:42:55.282Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "24"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^13.6.0",
+    "firebase-functions": "^7.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.4.1",
+    "typescript": "^6.0.0"
+  },
+  "private": true
+}
+[debug] [2026-04-23T03:42:55.283Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[debug] [2026-04-23T03:42:55.284Z] Could not find functions.yaml. Must use http discovery
+[debug] [2026-04-23T03:42:55.308Z] Found firebase-functions binary at 'E:\sudz\carwash-saas\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8785
+
+[debug] [2026-04-23T03:43:05.029Z] Got response from /__/functions.yaml {"endpoints":{"onBookingCreated":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.created","eventFilters":{"database":"(default)","namespace":"(default)"},"eventFilterPathPatterns":{"document":"bookings/{bookingId}"},"retry":false},"entryPoint":"onBookingCreated"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled... 
+[debug] [2026-04-23T03:43:09.102Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:09.102Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:09.102Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com [none]
+[debug] [2026-04-23T03:43:09.103Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:43:10.577Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com 200
+[debug] [2026-04-23T03:43:10.577Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com [omitted]
+[warn] !  extensions: missing required API firebaseextensions.googleapis.com. Enabling now... 
+[debug] [2026-04-23T03:43:10.578Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:10.578Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:10.579Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com:enable [none]
+[debug] [2026-04-23T03:43:10.579Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com:enable  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:43:11.161Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com:enable 200
+[debug] [2026-04-23T03:43:11.161Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firebaseextensions.googleapis.com:enable [omitted]
+[debug] [2026-04-23T03:43:21.176Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-23T03:43:21.177Z] > authorizing via signed-in user (letsbeedevjoseph@gmail.com)
+[debug] [2026-04-23T03:43:21.177Z] [iam] checking project carwash-saas-da4b2 for permissions ["firebase.projects.get","firebaseextensions.instances.list"]
+[debug] [2026-04-23T03:43:21.178Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:21.178Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:21.178Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions [none]
+[debug] [2026-04-23T03:43:21.178Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-23T03:43:21.178Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2026-04-23T03:43:22.359Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions 200
+[debug] [2026-04-23T03:43:22.359Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2026-04-23T03:43:22.360Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:22.360Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:22.360Z] >>> [apiv2][query] GET https://firebaseextensions.googleapis.com/v1beta/projects/carwash-saas-da4b2/instances pageSize=100&pageToken=
+[debug] [2026-04-23T03:43:29.392Z] <<< [apiv2][status] GET https://firebaseextensions.googleapis.com/v1beta/projects/carwash-saas-da4b2/instances 200
+[debug] [2026-04-23T03:43:29.393Z] <<< [apiv2][body] GET https://firebaseextensions.googleapis.com/v1beta/projects/carwash-saas-da4b2/instances {}
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged E:\sudz\carwash-saas\functions (98.44 KB) for uploading 
+[debug] [2026-04-23T03:43:29.594Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:29.594Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:29.594Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/carwash-saas-da4b2/locations/-/functions [none]
+[debug] [2026-04-23T03:43:30.501Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/carwash-saas-da4b2/locations/-/functions 200
+[debug] [2026-04-23T03:43:30.501Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/carwash-saas-da4b2/locations/-/functions {}
+[debug] [2026-04-23T03:43:30.502Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:30.502Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:30.503Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2026-04-23T03:43:32.118Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/-/functions 200
+[debug] [2026-04-23T03:43:32.118Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/-/functions {}
+[debug] [2026-04-23T03:43:32.120Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:32.120Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:32.120Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) [none]
+[debug] [2026-04-23T03:43:33.847Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) 200
+[debug] [2026-04-23T03:43:33.847Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) {"name":"projects/carwash-saas-da4b2/databases/(default)","uid":"8a7328b2-9acd-47be-ad91-e039c6ff2a64","createTime":"2026-04-23T03:17:53.364506Z","updateTime":"2026-04-23T03:17:53.364506Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-04-23T03:17:53.364506Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IIfB/J6Hg5QDMJG8ufaCg5QD"}
+[info] i  functions: ensuring required API run.googleapis.com is enabled... 
+[debug] [2026-04-23T03:43:33.906Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:33.906Z] Checked if tokens are valid: true, expires at: 1776918506164
+[info] i  functions: ensuring required API eventarc.googleapis.com is enabled... 
+[debug] [2026-04-23T03:43:33.922Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:33.922Z] Checked if tokens are valid: true, expires at: 1776918506164
+[info] i  functions: ensuring required API pubsub.googleapis.com is enabled... 
+[debug] [2026-04-23T03:43:33.924Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:33.924Z] Checked if tokens are valid: true, expires at: 1776918506164
+[info] i  functions: ensuring required API storage.googleapis.com is enabled... 
+[debug] [2026-04-23T03:43:33.929Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:33.929Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:33.929Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com [none]
+[debug] [2026-04-23T03:43:33.930Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:33.932Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com [none]
+[debug] [2026-04-23T03:43:33.932Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:33.935Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/pubsub.googleapis.com [none]
+[debug] [2026-04-23T03:43:33.935Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/pubsub.googleapis.com  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:33.937Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/storage.googleapis.com [none]
+[debug] [2026-04-23T03:43:33.938Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/storage.googleapis.com  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:35.422Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com 200
+[debug] [2026-04-23T03:43:35.422Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com [omitted]
+[warn] !  functions: missing required API run.googleapis.com. Enabling now... 
+[debug] [2026-04-23T03:43:35.427Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:35.427Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:35.428Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com:enable [none]
+[debug] [2026-04-23T03:43:35.428Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com:enable  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:35.434Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/pubsub.googleapis.com 200
+[debug] [2026-04-23T03:43:35.434Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/pubsub.googleapis.com [omitted]
+[info] +  functions: required API pubsub.googleapis.com is enabled 
+[debug] [2026-04-23T03:43:35.454Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/storage.googleapis.com 200
+[debug] [2026-04-23T03:43:35.454Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/storage.googleapis.com [omitted]
+[info] +  functions: required API storage.googleapis.com is enabled 
+[debug] [2026-04-23T03:43:35.471Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com 200
+[debug] [2026-04-23T03:43:35.472Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com [omitted]
+[warn] !  functions: missing required API eventarc.googleapis.com. Enabling now... 
+[debug] [2026-04-23T03:43:35.479Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:35.479Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:35.480Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com:enable [none]
+[debug] [2026-04-23T03:43:35.480Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com:enable  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:35.941Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com:enable 200
+[debug] [2026-04-23T03:43:35.941Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/eventarc.googleapis.com:enable [omitted]
+[debug] [2026-04-23T03:43:37.017Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com:enable 200
+[debug] [2026-04-23T03:43:37.018Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/455006204030/services/run.googleapis.com:enable [omitted]
+[info] i  functions: generating the service identity for pubsub.googleapis.com... 
+[debug] [2026-04-23T03:43:47.047Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:47.047Z] Checked if tokens are valid: true, expires at: 1776918506164
+[info] i  functions: generating the service identity for eventarc.googleapis.com... 
+[debug] [2026-04-23T03:43:47.048Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:47.048Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:47.049Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/pubsub.googleapis.com:generateServiceIdentity [none]
+[debug] [2026-04-23T03:43:47.049Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/pubsub.googleapis.com:generateServiceIdentity  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:47.049Z] >>> [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/pubsub.googleapis.com:generateServiceIdentity {}
+[debug] [2026-04-23T03:43:47.053Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/eventarc.googleapis.com:generateServiceIdentity [none]
+[debug] [2026-04-23T03:43:47.054Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/eventarc.googleapis.com:generateServiceIdentity  x-goog-user-project=455006204030
+[debug] [2026-04-23T03:43:47.055Z] >>> [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/eventarc.googleapis.com:generateServiceIdentity {}
+[debug] [2026-04-23T03:43:49.122Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/pubsub.googleapis.com:generateServiceIdentity 200
+[debug] [2026-04-23T03:43:49.122Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/pubsub.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-455006204030@gcp-sa-pubsub.iam.gserviceaccount.com","uniqueId":"116251664528390057860"}}
+[debug] [2026-04-23T03:43:49.155Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/eventarc.googleapis.com:generateServiceIdentity 200
+[debug] [2026-04-23T03:43:49.155Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/455006204030/services/eventarc.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-455006204030@gcp-sa-eventarc.iam.gserviceaccount.com","uniqueId":"113642086088385213111"}}
+[debug] [2026-04-23T03:43:49.160Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:49.160Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:49.160Z] >>> [apiv2][query] GET https://compute.googleapis.com/compute/v1/projects/455006204030 [none]
+[debug] [2026-04-23T03:43:49.651Z] <<< [apiv2][status] GET https://compute.googleapis.com/compute/v1/projects/455006204030 403
+[debug] [2026-04-23T03:43:49.653Z] <<< [apiv2][body] GET https://compute.googleapis.com/compute/v1/projects/455006204030 {"error":{"code":403,"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","errors":[{"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","domain":"usageLimits","reason":"accessNotConfigured","extendedHelp":"https://console.developers.google.com"}],"status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"SERVICE_DISABLED","domain":"googleapis.com","metadata":{"consumer":"projects/455006204030","containerInfo":"455006204030","serviceTitle":"Compute Engine API","activationUrl":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030","service":"compute.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console API activation","url":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030"}]}]}}
+[debug] [2026-04-23T03:43:49.654Z] unable to look up default compute service account. Falling back to 455006204030-compute@developer.gserviceaccount.com. Error: {"name":"FirebaseError","children":[],"context":{"body":{"error":{"code":403,"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","errors":[{"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","domain":"usageLimits","reason":"accessNotConfigured","extendedHelp":"https://console.developers.google.com"}],"status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"SERVICE_DISABLED","domain":"googleapis.com","metadata":{"consumer":"projects/455006204030","containerInfo":"455006204030","serviceTitle":"Compute Engine API","activationUrl":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030","service":"compute.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console API activation","url":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030"}]}]}},"response":{"statusCode":403}},"exit":1,"message":"Request to https://compute.googleapis.com/compute/v1/projects/455006204030 had HTTP Error: 403, Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","status":403}
+[debug] [2026-04-23T03:43:49.655Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:49.656Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:49.656Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:getIamPolicy [none]
+[debug] [2026-04-23T03:43:51.082Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:getIamPolicy 200
+[debug] [2026-04-23T03:43:51.082Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:getIamPolicy {"version":1,"etag":"BwZQGHQ/H/0=","bindings":[{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:455006204030@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-455006204030@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-455006204030@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:455006204030@cloudservices.gserviceaccount.com","serviceAccount:carwash-saas-da4b2@appspot.gserviceaccount.com","serviceAccount:455006204030-compute@developer.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/firebaseappcheck.admin","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/firebasemods.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firebasemods.iam.gserviceaccount.com"]},{"role":"roles/firebaserules.system","members":["serviceAccount:service-455006204030@firebase-rules.iam.gserviceaccount.com"]},{"role":"roles/firestore.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firestore.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:letsbeedevjoseph@gmail.com"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-455006204030@serverless-robot-prod.iam.gserviceaccount.com"]}]}
+[debug] [2026-04-23T03:43:51.083Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:51.083Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:51.083Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:setIamPolicy [none]
+[debug] [2026-04-23T03:43:51.083Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:setIamPolicy {"policy":{"version":1,"etag":"BwZQGHQ/H/0=","bindings":[{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:455006204030@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-455006204030@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-455006204030@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:455006204030@cloudservices.gserviceaccount.com","serviceAccount:carwash-saas-da4b2@appspot.gserviceaccount.com","serviceAccount:455006204030-compute@developer.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/firebaseappcheck.admin","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/firebasemods.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firebasemods.iam.gserviceaccount.com"]},{"role":"roles/firebaserules.system","members":["serviceAccount:service-455006204030@firebase-rules.iam.gserviceaccount.com"]},{"role":"roles/firestore.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firestore.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com","serviceAccount:service-455006204030@gcp-sa-pubsub.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:letsbeedevjoseph@gmail.com"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-455006204030@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/run.invoker","members":["serviceAccount:455006204030-compute@developer.gserviceaccount.com"]},{"role":"roles/eventarc.eventReceiver","members":["serviceAccount:455006204030-compute@developer.gserviceaccount.com"]}]},"updateMask":"bindings"}
+[debug] [2026-04-23T03:43:52.009Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:setIamPolicy 200
+[debug] [2026-04-23T03:43:52.010Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/455006204030:setIamPolicy {"version":1,"etag":"BwZQGHTzwps=","bindings":[{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:455006204030@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-455006204030@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-455006204030@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:455006204030-compute@developer.gserviceaccount.com","serviceAccount:455006204030@cloudservices.gserviceaccount.com","serviceAccount:carwash-saas-da4b2@appspot.gserviceaccount.com"]},{"role":"roles/eventarc.eventReceiver","members":["serviceAccount:455006204030-compute@developer.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/firebaseappcheck.admin","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com"]},{"role":"roles/firebasemods.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firebasemods.iam.gserviceaccount.com"]},{"role":"roles/firebaserules.system","members":["serviceAccount:service-455006204030@firebase-rules.iam.gserviceaccount.com"]},{"role":"roles/firestore.serviceAgent","members":["serviceAccount:service-455006204030@gcp-sa-firestore.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@carwash-saas-da4b2.iam.gserviceaccount.com","serviceAccount:service-455006204030@gcp-sa-pubsub.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:letsbeedevjoseph@gmail.com"]},{"role":"roles/run.invoker","members":["serviceAccount:455006204030-compute@developer.gserviceaccount.com"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-455006204030@serverless-robot-prod.iam.gserviceaccount.com"]}]}
+[debug] [2026-04-23T03:43:52.011Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:52.012Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:52.012Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2 [none]
+[debug] [2026-04-23T03:43:52.369Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2 200
+[debug] [2026-04-23T03:43:52.370Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2 {"projectNumber":"455006204030","projectId":"carwash-saas-da4b2","lifecycleState":"ACTIVE","name":"carwash-saas","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-04-23T02:35:19.340Z"}
+[debug] [2026-04-23T03:43:52.370Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:52.370Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:52.370Z] >>> [apiv2][query] GET https://compute.googleapis.com/compute/v1/projects/455006204030 [none]
+[debug] [2026-04-23T03:43:52.668Z] <<< [apiv2][status] GET https://compute.googleapis.com/compute/v1/projects/455006204030 403
+[debug] [2026-04-23T03:43:52.668Z] <<< [apiv2][body] GET https://compute.googleapis.com/compute/v1/projects/455006204030 {"error":{"code":403,"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","errors":[{"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","domain":"usageLimits","reason":"accessNotConfigured","extendedHelp":"https://console.developers.google.com"}],"status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"SERVICE_DISABLED","domain":"googleapis.com","metadata":{"service":"compute.googleapis.com","consumer":"projects/455006204030","containerInfo":"455006204030","activationUrl":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030","serviceTitle":"Compute Engine API"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console API activation","url":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030"}]}]}}
+[debug] [2026-04-23T03:43:52.668Z] unable to look up default compute service account. Falling back to 455006204030-compute@developer.gserviceaccount.com. Error: {"name":"FirebaseError","children":[],"context":{"body":{"error":{"code":403,"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","errors":[{"message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","domain":"usageLimits","reason":"accessNotConfigured","extendedHelp":"https://console.developers.google.com"}],"status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"SERVICE_DISABLED","domain":"googleapis.com","metadata":{"service":"compute.googleapis.com","consumer":"projects/455006204030","containerInfo":"455006204030","activationUrl":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030","serviceTitle":"Compute Engine API"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console API activation","url":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030"}]}]}},"response":{"statusCode":403}},"exit":1,"message":"Request to https://compute.googleapis.com/compute/v1/projects/455006204030 had HTTP Error: 403, Compute Engine API has not been used in project 455006204030 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=455006204030 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","status":403}
+[debug] [2026-04-23T03:43:52.670Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:52.671Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:52.671Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/carwash-saas-da4b2/billingInfo [none]
+[debug] [2026-04-23T03:43:54.140Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/carwash-saas-da4b2/billingInfo 200
+[debug] [2026-04-23T03:43:54.140Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/carwash-saas-da4b2/billingInfo {"name":"projects/carwash-saas-da4b2/billingInfo","projectId":"carwash-saas-da4b2","billingAccountName":"billingAccounts/01B2CB-0E7D6D-82ADF8","billingEnabled":true}
+[debug] [2026-04-23T03:43:54.143Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:54.143Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:54.144Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2026-04-23T03:43:56.750Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2026-04-23T03:43:56.751Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com/3dc289a3-1aee-47a7-861a-5afb1020f95b.zip?GoogleAccessId=service-455006204030@gcf-admin-robot.iam.gserviceaccount.com&Expires=1776917636&Signature=I2iRoxA1WTL1Hhd3zBTa4e7M9O4fI%2Fm5L7qWzZfKdm34WboEgJfuu0KL9aEJBCXLRqeAv%2BeIOrLgss1sNIhP%2Fipp89Wf5ZP9PTmEhx9j9%2FpnWR94bu%2Fx54TXzHagXe%2Fp4PA6nT3H3a0gbmq8cR%2Fxem0gdzdo3A2BSClNU1Ve2HC1nN6bnF3yBLZKfprZtW2nC42%2F8lJ0cIgGaymDdMsbnC8QfL%2BHZauYjbZXKqrAhSNB9Ho3ZRl937JWOBTfr%2Fe3DWvlWhnSCtXV%2FVR4WbwPbkrUdskgg9qdO%2BszzQbZbpHi0Lh5vfq3zcWTDUFbThvbrQ6OgTlYfeFMySDDptjlnA%3D%3D","storageSource":{"bucket":"gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com","object":"3dc289a3-1aee-47a7-861a-5afb1020f95b.zip"}}
+[debug] [2026-04-23T03:43:56.754Z] >>> [apiv2][query] PUT https://storage.googleapis.com/gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com/3dc289a3-1aee-47a7-861a-5afb1020f95b.zip GoogleAccessId=service-455006204030%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1776917636&Signature=I2iRoxA1WTL1Hhd3zBTa4e7M9O4fI%2Fm5L7qWzZfKdm34WboEgJfuu0KL9aEJBCXLRqeAv%2BeIOrLgss1sNIhP%2Fipp89Wf5ZP9PTmEhx9j9%2FpnWR94bu%2Fx54TXzHagXe%2Fp4PA6nT3H3a0gbmq8cR%2Fxem0gdzdo3A2BSClNU1Ve2HC1nN6bnF3yBLZKfprZtW2nC42%2F8lJ0cIgGaymDdMsbnC8QfL%2BHZauYjbZXKqrAhSNB9Ho3ZRl937JWOBTfr%2Fe3DWvlWhnSCtXV%2FVR4WbwPbkrUdskgg9qdO%2BszzQbZbpHi0Lh5vfq3zcWTDUFbThvbrQ6OgTlYfeFMySDDptjlnA%3D%3D
+[debug] [2026-04-23T03:43:56.754Z] >>> [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com/3dc289a3-1aee-47a7-861a-5afb1020f95b.zip [stream]
+[debug] [2026-04-23T03:43:57.778Z] <<< [apiv2][status] PUT https://storage.googleapis.com/gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com/3dc289a3-1aee-47a7-861a-5afb1020f95b.zip 200
+[debug] [2026-04-23T03:43:57.778Z] <<< [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com/3dc289a3-1aee-47a7-861a-5afb1020f95b.zip [omitted]
+[info] +  functions: functions source uploaded successfully 
+[info] i  functions: creating Node.js 24 (2nd Gen) function onBookingCreated(us-central1)... 
+[debug] [2026-04-23T03:43:57.785Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:57.785Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:43:57.786Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions functionId=onBookingCreated
+[debug] [2026-04-23T03:43:57.786Z] >>> [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions {"name":"projects/carwash-saas-da4b2/locations/us-central1/functions/onBookingCreated","buildConfig":{"runtime":"nodejs24","entryPoint":"onBookingCreated","source":{"storageSource":{"bucket":"gcf-v2-uploads-455006204030.us-central1.cloudfunctions.appspot.com","object":"3dc289a3-1aee-47a7-861a-5afb1020f95b.zip"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""}},"serviceConfig":{"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"carwash-saas-da4b2\",\"storageBucket\":\"carwash-saas-da4b2.firebasestorage.app\"}","GCLOUD_PROJECT":"carwash-saas-da4b2","EVENTARC_CLOUD_EVENT_SOURCE":"projects/carwash-saas-da4b2/locations/us-central1/services/onBookingCreated","FUNCTION_SIGNATURE_TYPE":"cloudevent","FUNCTION_TARGET":"onBookingCreated","LOG_EXECUTION_ID":"true"},"ingressSettings":null,"timeoutSeconds":null,"serviceAccountEmail":null,"availableMemory":"256Mi","minInstanceCount":null,"maxInstanceCount":10,"maxInstanceRequestConcurrency":80,"availableCpu":"1","vpcConnector":null,"vpcConnectorEgressSettings":null,"directVpcNetworkInterface":null,"directVpcEgress":null},"labels":{"deployment-tool":"cli-firebase","firebase-functions-hash":"d52f03cc719101093864f0d65a277811b3f71286"},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.created","retryPolicy":"RETRY_POLICY_DO_NOT_RETRY","eventFilters":[{"attribute":"database","value":"(default)"},{"attribute":"namespace","value":"(default)"},{"attribute":"document","value":"bookings/{bookingId}","operator":"match-path-pattern"}],"triggerRegion":"nam5"}}
+[debug] [2026-04-23T03:44:15.415Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions 400
+[debug] [2026-04-23T03:44:15.415Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions {"error":{"code":400,"message":"Validation failed for trigger projects/carwash-saas-da4b2/locations/nam5/triggers/onbookingcreated-091275: Invalid resource state for \"\": Permission denied while using the Eventarc Service Agent. If you recently started to use Eventarc, it may take a few minutes before all necessary permissions are propagated to the Service Agent. Otherwise, verify that it has Eventarc Service Agent role.","status":"FAILED_PRECONDITION"}}
+[warn] !  functions: Request to https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions?functionId=onBookingCreated had HTTP Error: 400, Validation failed for trigger projects/carwash-saas-da4b2/locations/nam5/triggers/onbookingcreated-091275: Invalid resource state for "": Permission denied while using the Eventarc Service Agent. If you recently started to use Eventarc, it may take a few minutes before all necessary permissions are propagated to the Service Agent. Otherwise, verify that it has Eventarc Service Agent role. 
+[warn] !  functions: Since this is your first time using 2nd gen functions, we need a little bit longer to finish setting everything up. Retry the deployment in a few minutes. 
+[warn] !  functions:  failed to create function projects/carwash-saas-da4b2/locations/us-central1/functions/onBookingCreated 
+[error] Failed to create function projects/carwash-saas-da4b2/locations/us-central1/functions/onBookingCreated
+[warn] !  functions: Deploys failed. Skipping deletes. 
+[debug] [2026-04-23T03:44:15.428Z] Total Function Deployment time: 17637
+[debug] [2026-04-23T03:44:15.428Z] 1 Functions Deployed
+[debug] [2026-04-23T03:44:15.428Z] 1 Functions Errored
+[debug] [2026-04-23T03:44:15.428Z] 0 Function Deployments Aborted
+[debug] [2026-04-23T03:44:15.429Z] Average Function Deployment time: 17636
+[info] 
+[info] Functions deploy had errors with the following functions:
+	onBookingCreated(us-central1)
+[debug] [2026-04-23T03:44:15.577Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:44:15.577Z] Checked if tokens are valid: true, expires at: 1776918506164
+[debug] [2026-04-23T03:44:15.577Z] >>> [apiv2][query] GET https://artifactregistry.googleapis.com/v1/projects/carwash-saas-da4b2/locations/us-central1/repositories/gcf-artifacts [none]
+[debug] [2026-04-23T03:44:17.080Z] <<< [apiv2][status] GET https://artifactregistry.googleapis.com/v1/projects/carwash-saas-da4b2/locations/us-central1/repositories/gcf-artifacts 404
+[debug] [2026-04-23T03:44:17.080Z] <<< [apiv2][body] GET https://artifactregistry.googleapis.com/v1/projects/carwash-saas-da4b2/locations/us-central1/repositories/gcf-artifacts {"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}
+[debug] [2026-04-23T03:44:17.080Z] Failed to check artifact cleanup policy for region us-central1: Request to https://artifactregistry.googleapis.com/v1/projects/carwash-saas-da4b2/locations/us-central1/repositories/gcf-artifacts had HTTP Error: 404, Requested entity was not found. {"name":"FirebaseError","children":[],"context":{"body":{"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}},"response":{"statusCode":404}},"exit":1,"message":"Request to https://artifactregistry.googleapis.com/v1/projects/carwash-saas-da4b2/locations/us-central1/repositories/gcf-artifacts had HTTP Error: 404, Requested entity was not found.","status":404}
+[debug] [2026-04-23T03:44:17.082Z] Functions deploy failed.
+[debug] [2026-04-23T03:44:17.082Z] {
+  "endpoint": {
+    "id": "onBookingCreated",
+    "project": "carwash-saas-da4b2",
+    "region": "us-central1",
+    "entryPoint": "onBookingCreated",
+    "platform": "gcfv2",
+    "runtime": "nodejs24",
+    "eventTrigger": {
+      "eventType": "google.cloud.firestore.document.v1.created",
+      "retry": false,
+      "eventFilters": {
+        "database": "(default)",
+        "namespace": "(default)"
+      },
+      "eventFilterPathPatterns": {
+        "document": "bookings/{bookingId}"
+      },
+      "region": "nam5"
+    },
+    "labels": {
+      "deployment-tool": "cli-firebase"
+    },
+    "serviceAccount": null,
+    "ingressSettings": null,
+    "availableMemoryMb": null,
+    "timeoutSeconds": null,
+    "maxInstances": 10,
+    "minInstances": null,
+    "concurrency": 80,
+    "vpc": null,
+    "environmentVariables": {
+      "FIREBASE_CONFIG": "{\"projectId\":\"carwash-saas-da4b2\",\"storageBucket\":\"carwash-saas-da4b2.firebasestorage.app\"}",
+      "GCLOUD_PROJECT": "carwash-saas-da4b2",
+      "EVENTARC_CLOUD_EVENT_SOURCE": "projects/carwash-saas-da4b2/locations/us-central1/services/onBookingCreated"
+    },
+    "codebase": "default",
+    "cpu": 1,
+    "targetedByOnly": false,
+    "hash": "d52f03cc719101093864f0d65a277811b3f71286"
+  },
+  "op": "create",
+  "original": {
+    "name": "FirebaseError",
+    "children": [],
+    "context": {
+      "function": "projects/carwash-saas-da4b2/locations/us-central1/functions/onBookingCreated"
+    },
+    "exit": 1,
+    "message": "Failed to create function projects/carwash-saas-da4b2/locations/us-central1/functions/onBookingCreated",
+    "original": {
+      "name": "FirebaseError",
+      "children": [],
+      "context": {
+        "body": {
+          "error": {
+            "code": 400,
+            "message": "Validation failed for trigger projects/carwash-saas-da4b2/locations/nam5/triggers/onbookingcreated-091275: Invalid resource state for \"\": Permission denied while using the Eventarc Service Agent. If you recently started to use Eventarc, it may take a few minutes before all necessary permissions are propagated to the Service Agent. Otherwise, verify that it has Eventarc Service Agent role.",
+            "status": "FAILED_PRECONDITION"
+          }
+        },
+        "response": {
+          "statusCode": 400
+        }
+      },
+      "exit": 1,
+      "message": "Request to https://cloudfunctions.googleapis.com/v2/projects/carwash-saas-da4b2/locations/us-central1/functions?functionId=onBookingCreated had HTTP Error: 400, Validation failed for trigger projects/carwash-saas-da4b2/locations/nam5/triggers/onbookingcreated-091275: Invalid resource state for \"\": Permission denied while using the Eventarc Service Agent. If you recently started to use Eventarc, it may take a few minutes before all necessary permissions are propagated to the Service Agent. Otherwise, verify that it has Eventarc Service Agent role.",
+      "status": 400
+    },
+    "status": 400,
+    "code": 400
+  }
+}
+[debug] [2026-04-23T03:44:17.168Z] Error: Failed to create function onBookingCreated in region us-central1
+    at C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:332:27
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Fabricator.createV2Function (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:311:30)
+    at async Fabricator.createEndpoint (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:153:13)
+    at async Fabricator.wrapOperation (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:138:13)
+    at async Promise.all (index 0)
+    at async Promise.allSettled (index 0)
+    at async Fabricator.applyPlan (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\fabricator.js:77:45)
+    at async release (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\release\index.js:87:21)
+    at async chain (C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:45:9)
+[error] 
+[error] Error: There was an error deploying functions

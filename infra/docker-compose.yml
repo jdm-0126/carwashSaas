@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: carwash-app
+    ports:
+      - "5173:80"
+    environment:
+      - VITE_API_KEY=${VITE_API_KEY}
+      - VITE_AUTH_DOMAIN=${VITE_AUTH_DOMAIN}
+      - VITE_PROJECT_ID=${VITE_PROJECT_ID}
+      - VITE_STORAGE_BUCKET=${VITE_STORAGE_BUCKET}
+      - VITE_MSG_ID=${VITE_MSG_ID}
+      - VITE_APP_ID=${VITE_APP_ID}

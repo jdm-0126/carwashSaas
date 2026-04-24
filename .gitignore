@@ -1,0 +1,21 @@
+# env
+.env
+.env.local
+.env.production
+
+# scripts
+createOwner.js
+
+# firebase admin
+serviceAccountKey.json
+
+# dependencies
+node_modules
+
+# build
+dist
+
+# firebase
+.firebase
+
+.vercel
