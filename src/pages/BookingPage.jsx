@@ -7,9 +7,8 @@ import { db } from "../services/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import {
   Box, Typography, Card, CardContent, Avatar, TextField,
-  Button, Stack, Link, Chip, Divider, Radio, RadioGroup,
-  FormControlLabel, FormControl, MenuItem, Select, InputLabel,
-  Tooltip, IconButton, Alert, Dialog, DialogContent,
+  Button, Stack, Link, Chip, Divider, Alert, Dialog, DialogContent,
+  Tooltip, IconButton,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LoginIcon from "@mui/icons-material/Login";
@@ -21,6 +20,7 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LanguageIcon from "@mui/icons-material/Language";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import BookingChatWidget from "../components/ChatBox";
 
 const checkIcon = <CheckIcon sx={{ fontSize: "12px !important" }} />;
 const InclusionChip = ({ label }) => (
@@ -42,8 +42,19 @@ const generateSlots = (from, to) => {
 };
 
 const DAYS  = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const SIZES = ["Sub-Compact","Small","Medium","Large","X-Large"];
 const today = new Date().toISOString().split("T")[0];
 const INIT  = { customerName:"", phone:"", packageId:"", vehicleSize:"", date:"", time:"", notes:"" };
+
+// Helper to sort vehicle sizes in correct order
+const sortSizes = (sizesObj) => {
+  if (!sizesObj) return [];
+  return Object.entries(sizesObj).sort((a, b) => {
+    const indexA = SIZES.indexOf(a[0]);
+    const indexB = SIZES.indexOf(b[0]);                                
+    return indexA - indexB;
+  });
+};
 
 export default function BookingPage() {
   const navigate       = useNavigate();
@@ -61,7 +72,6 @@ export default function BookingPage() {
   const [businessHours, setBusinessHours] = useState(null);
   const [packages, setPackages] = useState([]);
   const [baseInclusions, setBaseInclusions] = useState([]);
-  const [displayMode, setDisplayMode] = useState("cards");
   const [blockedSlots, setBlockedSlots] = useState([]);
   const [paymentFile, setPaymentFile]   = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -81,10 +91,19 @@ export default function BookingPage() {
       if (!data) return;
       setBusiness(data);
       if (data.businessHours)   setBusinessHours(data.businessHours);
-      if (data.displayMode)      setDisplayMode(data.displayMode);
       if (data.baseInclusions)   setBaseInclusions(data.baseInclusions);
       const snap = await getDocs(query(collection(db, "services"), where("businessId", "==", data.id)));
-      if (!snap.empty) setPackages(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      if (!snap.empty) {
+        const sorted = snap.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => {
+            // Sort by createdAt timestamp (oldest first)
+            const aTime = a.createdAt?.toMillis?.() ?? 0;
+            const bTime = b.createdAt?.toMillis?.() ?? 0;
+            return aTime - bTime;
+          });
+        setPackages(sorted);
+      }
     };
     load();
   }, [slug, bizParam, ownerBusiness]);
@@ -99,6 +118,124 @@ export default function BookingPage() {
     if (!form.date || !business?.id) return;
     getConfirmedSlotsForDate(business.id, form.date).then(setBlockedSlots);
   }, [form.date, business?.id]);
+
+  // Expose form update function for chat widget
+  useEffect(() => {
+    window.updateBookingForm = (chatData) => {
+      console.log("Chat data received:", chatData);
+      
+      // Find package by name (more flexible matching)
+      const pkg = packages.find(p => {
+        const pkgName = p.name.toLowerCase();
+        const chatPkg = (chatData.package || "").toLowerCase();
+        return pkgName.includes(chatPkg) || chatPkg.includes(pkgName.split(" ")[0]);
+      });
+      
+      console.log("Found package:", pkg);
+      
+      // Normalize phone
+      let phone = chatData.phone || "";
+      if (phone) {
+        phone = phone.replace(/\s/g, "");
+        if (phone.startsWith("0")) {
+          phone = "+63" + phone.slice(1);
+        } else if (!phone.startsWith("+")) {
+          phone = "+63" + phone;
+        }
+      }
+      
+      // Parse date from chat (handle various formats)
+      let formattedDate = "";
+      if (chatData.date) {
+        const dateStr = chatData.date.toLowerCase();
+        const today = new Date();
+        
+        if (dateStr.includes("tomorrow")) {
+          const tomorrow = new Date(today);
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          formattedDate = tomorrow.toISOString().split("T")[0];
+        } else {
+          // Try to parse the date
+          const parsed = new Date(chatData.date);
+          if (!isNaN(parsed.getTime())) {
+            formattedDate = parsed.toISOString().split("T")[0];
+          }
+        }
+      }
+      
+      // Parse time from chat (convert to 24-hour format)
+      let formattedTime = "";
+      if (chatData.time) {
+        const timeStr = chatData.time.toLowerCase();
+        const timeMatch = timeStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/);
+        
+        if (timeMatch) {
+          let hours = parseInt(timeMatch[1]);
+          const minutes = timeMatch[2] || "00";
+          const period = timeMatch[3];
+          
+          if (period === "pm" && hours !== 12) hours += 12;
+          if (period === "am" && hours === 12) hours = 0;
+          
+          formattedTime = `${String(hours).padStart(2, "0")}:${minutes}`;
+        }
+      }
+      
+      setForm(prev => ({
+        ...prev,
+        ...(pkg && { packageId: pkg.id }),
+        ...(chatData.vehicleSize && { vehicleSize: chatData.vehicleSize }),
+        ...(chatData.name && { customerName: chatData.name }),
+        ...(phone && { phone }),
+        ...(formattedDate && { date: formattedDate }),
+        ...(formattedTime && { time: formattedTime }),
+      }));
+      
+      // Auto-navigate to form step on mobile
+      setStep("form");
+    };
+    
+    // Expose submit function for chat
+    window.submitBookingForm = async () => {
+      const errs = validate();
+      if (Object.keys(errs).length === 0) {
+        setLoading(true);
+        try {
+          let proofUrl = null;
+          const bizId  = business?.id || bizParam || "";
+          if (paymentFile) {
+            const tempRef = "SZ-" + Date.now().toString(36).toUpperCase().slice(-6);
+            proofUrl = await uploadPaymentProof(bizId, tempRef, paymentFile);
+          }
+          const ref = await createBooking({
+            ...form,
+            serviceId:     form.packageId,
+            serviceName:   selectedPkg?.name,
+            price:         selectedPrice,
+            businessId:    bizId,
+            plan:          business?.plan || "starter",
+            paymentProof:  proofUrl,
+            paymentMethod: paymentMethod || null,
+          });
+          setRefNumber(ref);
+          setDone(true);
+        } catch (err) {
+          if (err.message?.startsWith("PLAN_LIMIT")) setLimitReached(true);
+          else setErrors((prev) => ({ ...prev, submit: "Something went wrong. Please try again." }));
+        } finally { 
+          setLoading(false); 
+        }
+      } else {
+        console.error("Validation errors:", errs);
+        setErrors(errs);
+      }
+    };
+    
+    return () => {
+      delete window.updateBookingForm;
+      delete window.submitBookingForm;
+    };
+  }, [packages, form, business]);
 
   const getTimeConstraints = () => {
     if (!form.date) return {};
@@ -271,123 +408,59 @@ export default function BookingPage() {
             </>
           )}
 
-          {/* DROPDOWN mode */}
-          {displayMode === "dropdown" && (
-            <Stack spacing={2}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Select Package</InputLabel>
-                <Select label="Select Package" value={form.packageId}
-                  onChange={(e) => setForm((f) => ({ ...f, packageId: e.target.value, vehicleSize: "" }))}>
-                  {packages.map((pkg, i) => (
-                    <MenuItem key={pkg.id} value={pkg.id}>PKG {i+1} — {pkg.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              {form.packageId && (
-                <FormControl fullWidth size="small">
-                  <InputLabel>Vehicle Size</InputLabel>
-                  <Select label="Vehicle Size" value={form.vehicleSize}
-                    onChange={(e) => setForm((f) => ({ ...f, vehicleSize: e.target.value }))}>
-                    {Object.entries(selectedPkg?.sizes || {}).map(([size, price]) => (
-                      <MenuItem key={size} value={size}>{size} — ₱{price.toLocaleString()}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            </Stack>
-          )}
-
-          {/* LIST mode */}
-          {displayMode === "list" && (
-            <Stack spacing={1}>
-              {packages.map((pkg, i) => {
-                const isSelected = form.packageId === pkg.id;
-                return (
-                  <Box key={pkg.id} onClick={() => setForm((f) => ({ ...f, packageId: pkg.id, vehicleSize: "" }))}
-                    sx={{ p:1.5, borderRadius:2, border:"1.5px solid", cursor:"pointer",
-                      borderColor: isSelected ? "primary.main" : "grey.200",
-                      bgcolor: isSelected ? "primary.50" : "white", transition:"all .1s" }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Chip label={`PKG ${i+1}`} size="small" color={isSelected ? "primary" : "default"} sx={{ fontSize:10, height:18 }} />
-                        <Typography fontSize={13} fontWeight={isSelected ? 600 : 400}>{pkg.name}</Typography>
-                      </Stack>
-                      <Typography fontSize={12} color="primary.main" fontWeight={600}>
-                        from ₱{Math.min(...Object.values(pkg.sizes||{})).toLocaleString()}
-                      </Typography>
+          {/* Package cards */}
+          <Stack spacing={1.5}>
+            {packages.map((pkg, i) => {
+              const isSelected = form.packageId === pkg.id;
+              return (
+                <Card key={pkg.id} onClick={() => setForm((f) => ({ ...f, packageId: pkg.id, vehicleSize: "" }))}
+                  sx={{ border:"2px solid", borderColor: isSelected ? "primary.main" : "grey.200",
+                    cursor:"pointer", boxShadow: isSelected ? 2 : 0, transition:"all .15s",
+                    "&:hover": { borderColor:"primary.light" } }}>
+                  <CardContent sx={{ py:"12px !important", px:2 }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.5}>
+                      <Chip label={`PKG ${i+1}`} size="small" color={isSelected ? "primary" : "default"} sx={{ fontSize:10, height:18, fontWeight:700 }} />
+                      {isSelected && <CheckCircleIcon color="primary" sx={{ fontSize:16 }} />}
                     </Stack>
-                    {isSelected && (
-                      <Stack direction="row" flexWrap="wrap" gap={0.8} mt={1}>
-                        {Object.entries(pkg.sizes||{}).map(([size, price]) => (
-                          <Box key={size} onClick={(e) => { e.stopPropagation(); setForm((f) => ({ ...f, vehicleSize: size })); }}
-                            sx={{ px:1, py:0.4, borderRadius:1, border:"1px solid", cursor:"pointer", fontSize:11,
-                              borderColor: form.vehicleSize===size ? "primary.main" : "grey.300",
-                              bgcolor: form.vehicleSize===size ? "primary.main" : "white",
-                              color: form.vehicleSize===size ? "white" : "text.primary" }}>
-                            {size} · ₱{price.toLocaleString()}
+                    <Typography fontWeight={600} fontSize={13} mb={1}>{pkg.name}</Typography>
+                    <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={0.5} mb={1}>
+                      {(pkg.extra || pkg.inclusions?.filter((x) => !baseInclusions.includes(x)) || []).map((inc) => (
+                        <Chip key={inc} label={inc} size="small" color="success" variant="outlined" sx={{ fontSize:10, height:18 }} />
+                      ))}
+                    </Stack>
+                    {/* Size-based pricing */}
+                    {pkg.sizes && (
+                      <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={1}>
+                        {sortSizes(pkg.sizes).map(([size, price]) => (
+                          <Box key={size} sx={{ textAlign:"center", minWidth:52,
+                            bgcolor: form.vehicleSize===size && isSelected ? "primary.main" : "grey.50",
+                            color:   form.vehicleSize===size && isSelected ? "white" : "text.primary",
+                            borderRadius:1, px:0.8, py:0.4, cursor:"pointer", border:"1px solid",
+                            borderColor: form.vehicleSize===size && isSelected ? "primary.main" : "grey.200",
+                            transition:"all .1s" }}
+                            onClick={(e) => { e.stopPropagation(); setForm((f) => ({ ...f, packageId: pkg.id, vehicleSize: size })); }}>
+                            <Typography fontSize={10} fontWeight={500}>{size}</Typography>
+                            <Typography fontSize={11} fontWeight={700}>₱{price.toLocaleString()}</Typography>
                           </Box>
                         ))}
                       </Stack>
                     )}
-                  </Box>
-                );
-              })}
-            </Stack>
-          )}
-
-          {/* CARDS mode (default) */}
-          {(displayMode === "cards" || !displayMode) && (
-            <Stack spacing={1.5}>
-              {packages.map((pkg, i) => {
-                const isSelected = form.packageId === pkg.id;
-                return (
-                  <Card key={pkg.id} onClick={() => setForm((f) => ({ ...f, packageId: pkg.id, vehicleSize: "" }))}
-                    sx={{ border:"2px solid", borderColor: isSelected ? "primary.main" : "grey.200",
-                      cursor:"pointer", boxShadow: isSelected ? 2 : 0, transition:"all .15s",
-                      "&:hover": { borderColor:"primary.light" } }}>
-                    <CardContent sx={{ py:"12px !important", px:2 }}>
-                      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.5}>
-                        <Chip label={`PKG ${i+1}`} size="small" color={isSelected ? "primary" : "default"} sx={{ fontSize:10, height:18, fontWeight:700 }} />
-                        {isSelected && <CheckCircleIcon color="primary" sx={{ fontSize:16 }} />}
-                      </Stack>
-                      <Typography fontWeight={600} fontSize={13} mb={1}>{pkg.name}</Typography>
-                      <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={0.5} mb={1}>
-                        {(pkg.extra || pkg.inclusions?.filter((x) => !baseInclusions.includes(x)) || []).map((inc) => (
-                          <Chip key={inc} label={inc} size="small" color="success" variant="outlined" sx={{ fontSize:10, height:18 }} />
-                        ))}
-                      </Stack>
-                      {/* Size-based pricing */}
-                      {pkg.sizes && (
-                        <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={1}>
-                          {Object.entries(pkg.sizes).map(([size, price]) => (
-                            <Box key={size} sx={{ textAlign:"center", minWidth:52,
-                              bgcolor: form.vehicleSize===size && isSelected ? "primary.main" : "grey.50",
-                              color:   form.vehicleSize===size && isSelected ? "white" : "text.primary",
-                              borderRadius:1, px:0.8, py:0.4, cursor:"pointer", border:"1px solid",
-                              borderColor: form.vehicleSize===size && isSelected ? "primary.main" : "grey.200",
-                              transition:"all .1s" }}
-                              onClick={(e) => { e.stopPropagation(); setForm((f) => ({ ...f, packageId: pkg.id, vehicleSize: size })); }}>
-                              <Typography fontSize={10} fontWeight={500}>{size}</Typography>
-                              <Typography fontSize={11} fontWeight={700}>₱{price.toLocaleString()}</Typography>
-                            </Box>
-                          ))}
-                        </Stack>
-                      )}
-                      {/* Flat price service */}
-                      {!pkg.sizes && pkg.price && (
-                        <Chip label={`₱${pkg.price.toLocaleString()}${pkg.duration ? " · " + pkg.duration : ""}`}
-                          size="small" color={isSelected ? "primary" : "default"} variant="outlined" sx={{ fontSize:11 }} />
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </Stack>
-          )}
+                    {/* Flat price service */}
+                    {!pkg.sizes && pkg.price && (
+                      <Chip label={`₱${pkg.price.toLocaleString()}${pkg.duration ? " · " + pkg.duration : ""}`}
+                        size="small" color={isSelected ? "primary" : "default"} variant="outlined" sx={{ fontSize:11 }} />
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </Stack>
         </Box>
 
         {/* RIGHT — booking form (hidden on mobile when on packages step) */}
-        <Box sx={{
+        <Box 
+          data-form-section="true"
+          sx={{
           flex:1,
           display:{ xs: step==="form" ? "flex" : "none", md:"flex" },
           flexDirection:"column",
@@ -449,7 +522,7 @@ export default function BookingPage() {
                     {tc.disabled ? (
                       <Alert severity="error" sx={{ fontSize:12 }}>We are closed on this day. Please pick another date.</Alert>
                     ) : (
-                      <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={1}>
+                      <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={{ xs: 0.8, sm: 1 }}>
                         {generateSlots(tc.min, tc.max).map((slot) => {
                           const isBlocked  = blockedSlots.includes(slot);
                           const isSelected = form.time === slot;
@@ -457,13 +530,20 @@ export default function BookingPage() {
                             <Box key={slot}
                               onClick={() => !isBlocked && setForm((f) => ({ ...f, time: slot }))}
                               sx={{
-                                px:1.5, py:0.6, borderRadius:1.5, fontSize:12, fontWeight:500,
-                                border:"1.5px solid", cursor: isBlocked ? "not-allowed" : "pointer",
+                                px:{ xs: 1.2, sm: 1.5 }, 
+                                py:{ xs: 0.5, sm: 0.6 }, 
+                                borderRadius:1.5, 
+                                fontSize:{ xs: 11, sm: 12 }, 
+                                fontWeight:500,
+                                border:"1.5px solid", 
+                                cursor: isBlocked ? "not-allowed" : "pointer",
                                 bgcolor: isBlocked ? "grey.100" : isSelected ? "primary.main" : "white",
                                 color:   isBlocked ? "text.disabled" : isSelected ? "white" : "text.primary",
                                 borderColor: isBlocked ? "grey.200" : isSelected ? "primary.main" : "grey.300",
                                 textDecoration: isBlocked ? "line-through" : "none",
                                 transition:"all .1s",
+                                minWidth: { xs: 60, sm: 70 },
+                                textAlign: "center",
                                 "&:hover": !isBlocked ? { borderColor:"primary.main", bgcolor: isSelected ? "primary.dark" : "primary.50" } : {},
                               }}>
                               {slot}
@@ -630,6 +710,13 @@ export default function BookingPage() {
           </Stack>
         </DialogContent>
       </Dialog>
+
+      {/* Chat Widget - Available for all plans, but free tier limited to 10 bookings */}
+      {business && (
+        business.plan === "pro" || 
+        business.plan === "enterprise" || 
+        (business.plan === "starter" && (business.bookingCount || 0) < 10)
+      ) && <BookingChatWidget />}
 
     </Box>
   );

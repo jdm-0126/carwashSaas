@@ -28,6 +28,17 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LanguageIcon from "@mui/icons-material/Language";
 
 const PLANS    = ["starter", "pro", "enterprise"];
+const SIZES    = ["Sub-Compact","Small","Medium","Large","X-Large"];
+
+// Helper to sort vehicle sizes in correct order
+const sortSizes = (sizesObj) => {
+  if (!sizesObj) return [];
+  return Object.entries(sizesObj).sort((a, b) => {
+    const indexA = SIZES.indexOf(a[0]);
+    const indexB = SIZES.indexOf(b[0]);
+    return indexA - indexB;
+  });
+};
 const INIT_FORM = { name: "", slug: "", email: "", password: "", phone: "", address: "", plan: "starter" };
 
 export default function SuperAdmin() {
@@ -52,7 +63,15 @@ export default function SuperAdmin() {
     setSelected(biz);
     setDrawerOpen(false);
     const snap = await getDocs(query(collection(db, "services"), where("businessId", "==", biz.id)));
-    setPackages(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    const sorted = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => {
+        // Sort by createdAt timestamp (oldest first)
+        const aTime = a.createdAt?.toMillis?.() ?? 0;
+        const bTime = b.createdAt?.toMillis?.() ?? 0;
+        return aTime - bTime;
+      });
+    setPackages(sorted);
   };
 
   const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -344,7 +363,7 @@ export default function SuperAdmin() {
                         <Box sx={{ textAlign: "right", ml: 2 }}>
                           {pkg.isPackage
                             ? <Stack spacing={0.3}>
-                                {Object.entries(pkg.sizes || {}).map(([size, price]) => (
+                                {sortSizes(pkg.sizes).map(([size, price]) => (
                                   <Typography key={size} fontSize={12} color="text.secondary">
                                     {size}: <strong>₱{price.toLocaleString()}</strong>
                                   </Typography>

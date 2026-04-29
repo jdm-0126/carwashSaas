@@ -43,6 +43,16 @@ const INIT_PKG  = { name: "", inclusions: "", sizes: SIZES.reduce((a, s) => ({ .
 const INIT_SOC  = { facebook: "", instagram: "", whatsapp: "", website: "" };
 const INIT_PAY  = { gcash: "", gcashQr: "", maya: "", mayaQr: "", gotym: "", gotymQr: "", bank: "" };
 
+// Helper to sort vehicle sizes in correct order
+const sortSizes = (sizesObj) => {
+  if (!sizesObj) return [];
+  return Object.entries(sizesObj).sort((a, b) => {
+    const indexA = SIZES.indexOf(a[0]);
+    const indexB = SIZES.indexOf(b[0]);
+    return indexA - indexB;
+  });
+};
+
 export default function Settings() {
   const { user, logout, business, refreshBusiness } = useAuth();
   const uid  = user?.uid;
@@ -95,7 +105,15 @@ export default function Settings() {
   const loadServices = async () => {
     if (!uid) return;
     const snap = await getDocs(query(collection(db, "services"), where("businessId", "==", uid)));
-    setServices(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    const sorted = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => {
+        // Sort by createdAt timestamp (oldest first)
+        const aTime = a.createdAt?.toMillis?.() ?? 0;
+        const bTime = b.createdAt?.toMillis?.() ?? 0;
+        return aTime - bTime;
+      });
+    setServices(sorted);
   };
 
   const handleLogoChange = async (e) => {
@@ -621,7 +639,7 @@ export default function Settings() {
                       <TableCell align="right">
                         {s.isPackage
                           ? <Stack direction="row" flexWrap="wrap" gap={0.5} justifyContent="flex-end">
-                              {Object.entries(s.sizes || {}).map(([sz, p]) => (
+                              {sortSizes(s.sizes).map(([sz, p]) => (
                                 <Chip key={sz} label={`${sz}: ₱${p}`} size="small" variant="outlined" sx={{ fontSize: 10, height: 18 }} />
                               ))}
                             </Stack>
@@ -769,7 +787,7 @@ export default function Settings() {
                     onChange={(e) => setEditSvc((s) => ({ ...s, inclusions: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean) }))} />
                   <Typography fontSize={13} fontWeight={600} color="text.secondary">Price per Vehicle Size (₱)</Typography>
                   <Stack direction="row" flexWrap="wrap" gap={1.5}>
-                    {Object.keys(editSvc.sizes || {}).map((size) => (
+                    {SIZES.filter(size => editSvc.sizes?.[size] !== undefined).map((size) => (
                       <TextField key={size} label={size} type="number" size="small" sx={{ width: 120 }}
                         value={editSvc.sizes[size] ?? ""}
                         onChange={(e) => setEditSvc((s) => ({ ...s, sizes: { ...s.sizes, [size]: e.target.value === "" ? "" : parseFloat(e.target.value) } }))} />
