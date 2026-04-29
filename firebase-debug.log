@@ -1,0 +1,162 @@
+[debug] [2026-04-29T05:21:42.348Z] ----------------------------------------------------------------------
+[debug] [2026-04-29T05:21:42.351Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only firestore:rules
+[debug] [2026-04-29T05:21:42.351Z] CLI Version:   15.15.0
+[debug] [2026-04-29T05:21:42.352Z] Platform:      win32
+[debug] [2026-04-29T05:21:42.352Z] Node Version:  v25.8.1
+[debug] [2026-04-29T05:21:42.352Z] Time:          Wed Apr 29 2026 13:21:42 GMT+0800 (China Standard Time)
+[debug] [2026-04-29T05:21:42.353Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-29T05:21:42.355Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-04-29T05:21:47.428Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-29T05:21:47.429Z] > authorizing via signed-in user (letsbeedevjoseph@gmail.com)
+[debug] [2026-04-29T05:21:47.429Z] [iam] checking project carwash-saas-da4b2 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2026-04-29T05:21:47.431Z] Checked if tokens are valid: false, expires at: 1776918506164
+[debug] [2026-04-29T05:21:47.431Z] Checked if tokens are valid: false, expires at: 1776918506164
+[debug] [2026-04-29T05:21:47.432Z] > refreshing access token with scopes: []
+[debug] [2026-04-29T05:21:47.437Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-04-29T05:21:47.438Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-29T05:21:47.641Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-04-29T05:21:47.641Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-29T05:21:47.657Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions [none]
+[debug] [2026-04-29T05:21:47.658Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-29T05:21:47.658Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2026-04-29T05:21:47.914Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-04-29T05:21:47.915Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-04-29T05:21:48.573Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions 200
+[debug] [2026-04-29T05:21:48.573Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'carwash-saas-da4b2'...
+[info] 
+[info] i  deploying firestore 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-04-29T05:21:48.578Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:48.579Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:48.579Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firestore.googleapis.com [none]
+[debug] [2026-04-29T05:21:48.579Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firestore.googleapis.com  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-29T05:21:50.225Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firestore.googleapis.com 200
+[debug] [2026-04-29T05:21:50.225Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/carwash-saas-da4b2/services/firestore.googleapis.com [omitted]
+[info] +  firestore: required API firestore.googleapis.com is enabled 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-04-29T05:21:50.234Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:50.234Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:50.235Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) [none]
+[debug] [2026-04-29T05:21:51.577Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) 200
+[debug] [2026-04-29T05:21:51.577Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) {"name":"projects/carwash-saas-da4b2/databases/(default)","uid":"8a7328b2-9acd-47be-ad91-e039c6ff2a64","createTime":"2026-04-23T03:17:53.364506Z","updateTime":"2026-04-23T03:17:53.364506Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-04-29T04:21:58.440043Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"ILn9+baokpQDMJG8ufaCg5QD"}
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-04-29T05:21:51.578Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:51.579Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:51.579Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test [none]
+[debug] [2026-04-29T05:21:51.579Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test [omitted]
+[debug] [2026-04-29T05:21:53.113Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test 200
+[debug] [2026-04-29T05:21:53.113Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2026-04-29T05:21:53.114Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:53.114Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:53.116Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases pageSize=10&pageToken=
+[debug] [2026-04-29T05:21:54.498Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases 200
+[debug] [2026-04-29T05:21:54.499Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases {"releases":[{"name":"projects/carwash-saas-da4b2/releases/cloud.firestore","rulesetName":"projects/carwash-saas-da4b2/rulesets/d47a2e34-395c-4104-9862-45c7ec7ab395","createTime":"2026-04-23T03:17:57.519821Z","updateTime":"2026-04-23T03:17:57.519821Z"},{"name":"projects/carwash-saas-da4b2/releases/firebase.storage","rulesetName":"projects/carwash-saas-da4b2/rulesets/d7fb15a5-420e-4367-97b4-27255c3f2e91","createTime":"2026-04-24T04:53:03.018913Z","updateTime":"2026-04-24T04:53:18.821331Z"},{"name":"projects/carwash-saas-da4b2/releases/firebase.storage/carwash-saas-da4b2.firebasestorage.app","rulesetName":"projects/carwash-saas-da4b2/rulesets/bb879096-15ae-48a3-8503-1f9ea10d88a6","createTime":"2026-04-24T05:31:27.076993Z","updateTime":"2026-04-24T05:40:05.413251Z"}]}
+[debug] [2026-04-29T05:21:54.518Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:54.518Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:54.519Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets/d47a2e34-395c-4104-9862-45c7ec7ab395 [none]
+[debug] [2026-04-29T05:21:55.962Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets/d47a2e34-395c-4104-9862-45c7ec7ab395 200
+[debug] [2026-04-29T05:21:55.963Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets/d47a2e34-395c-4104-9862-45c7ec7ab395 [omitted]
+[info] i  firestore: uploading rules firestore.rules... 
+[debug] [2026-04-29T05:21:55.964Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:55.965Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:55.965Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets [none]
+[debug] [2026-04-29T05:21:55.965Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets [omitted]
+[debug] [2026-04-29T05:21:57.524Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets 200
+[debug] [2026-04-29T05:21:57.525Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets {"name":"projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded","source":{"files":[{"content":"rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n\n    match /businesses/{userId} {\n      allow read: if true;\n      allow write: if request.auth != null && request.auth.uid == userId;\n    }\n\n    match /services/{id} {\n      allow read: if true;\n      allow write: if request.auth != null;\n    }\n\n    match /bookings/{id} {\n      allow read, write: if request.auth != null;\n    }\n\n    match /customers/{id} {\n      allow read, write: if request.auth != null;\n    }\n  }\n}\n","name":"firestore.rules"}]},"createTime":"2026-04-29T05:22:04.338975Z","metadata":{"services":["cloud.firestore"]}}
+[debug] [2026-04-29T05:21:57.525Z] [rules] created ruleset projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded
+[debug] [2026-04-29T05:21:57.525Z] [rules] releasing cloud.firestore/(default) with ruleset projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded
+[debug] [2026-04-29T05:21:57.526Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:57.526Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:21:57.526Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) [none]
+[debug] [2026-04-29T05:21:57.526Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) {"release":{"name":"projects/carwash-saas-da4b2/releases/cloud.firestore/(default)","rulesetName":"projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded"}}
+[debug] [2026-04-29T05:21:58.133Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) 200
+[debug] [2026-04-29T05:21:58.133Z] <<< [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) {"name":"projects/carwash-saas-da4b2/releases/cloud.firestore","rulesetName":"projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded","createTime":"2026-04-23T03:17:57.519821Z","updateTime":"2026-04-29T05:22:04.937114Z"}
+[debug] [2026-04-29T05:21:58.133Z] [rules] updated release projects/carwash-saas-da4b2/releases/cloud.firestore
+[info] +  firestore: released rules firestore.rules to cloud.firestore 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/carwash-saas-da4b2/overview
+[debug] [2026-04-29T05:42:05.133Z] ----------------------------------------------------------------------
+[debug] [2026-04-29T05:42:05.139Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Admin\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only firestore
+[debug] [2026-04-29T05:42:05.140Z] CLI Version:   15.15.0
+[debug] [2026-04-29T05:42:05.140Z] Platform:      win32
+[debug] [2026-04-29T05:42:05.140Z] Node Version:  v25.8.1
+[debug] [2026-04-29T05:42:05.141Z] Time:          Wed Apr 29 2026 13:42:05 GMT+0800 (China Standard Time)
+[debug] [2026-04-29T05:42:05.141Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-29T05:42:08.679Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-29T05:42:08.680Z] > authorizing via signed-in user (letsbeedevjoseph@gmail.com)
+[debug] [2026-04-29T05:42:08.681Z] [iam] checking project carwash-saas-da4b2 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2026-04-29T05:42:08.685Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:08.686Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:08.689Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions [none]
+[debug] [2026-04-29T05:42:08.690Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions  x-goog-user-project=carwash-saas-da4b2
+[debug] [2026-04-29T05:42:08.690Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2026-04-29T05:42:09.768Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions 200
+[debug] [2026-04-29T05:42:09.769Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/carwash-saas-da4b2:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'carwash-saas-da4b2'...
+[info] 
+[info] i  deploying firestore 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[info] i  firestore: ensuring required API firestore.googleapis.com is enabled... 
+[debug] [2026-04-29T05:42:09.778Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:09.778Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:09.778Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) [none]
+[debug] [2026-04-29T05:42:11.151Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) 200
+[debug] [2026-04-29T05:42:11.152Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) {"name":"projects/carwash-saas-da4b2/databases/(default)","uid":"8a7328b2-9acd-47be-ad91-e039c6ff2a64","createTime":"2026-04-23T03:17:53.364506Z","updateTime":"2026-04-23T03:17:53.364506Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-04-29T04:42:18.015176Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IPj2vvyskpQDMJG8ufaCg5QD"}
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2026-04-29T05:42:11.155Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:11.155Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:11.156Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test [none]
+[debug] [2026-04-29T05:42:11.156Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test [omitted]
+[debug] [2026-04-29T05:42:12.963Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test 200
+[debug] [2026-04-29T05:42:12.963Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2026-04-29T05:42:12.964Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:12.964Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:12.965Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases pageSize=10&pageToken=
+[debug] [2026-04-29T05:42:13.494Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases 200
+[debug] [2026-04-29T05:42:13.495Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases {"releases":[{"name":"projects/carwash-saas-da4b2/releases/cloud.firestore","rulesetName":"projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded","createTime":"2026-04-23T03:17:57.519821Z","updateTime":"2026-04-29T05:22:04.937114Z"},{"name":"projects/carwash-saas-da4b2/releases/firebase.storage","rulesetName":"projects/carwash-saas-da4b2/rulesets/d7fb15a5-420e-4367-97b4-27255c3f2e91","createTime":"2026-04-24T04:53:03.018913Z","updateTime":"2026-04-24T04:53:18.821331Z"},{"name":"projects/carwash-saas-da4b2/releases/firebase.storage/carwash-saas-da4b2.firebasestorage.app","rulesetName":"projects/carwash-saas-da4b2/rulesets/bb879096-15ae-48a3-8503-1f9ea10d88a6","createTime":"2026-04-24T05:31:27.076993Z","updateTime":"2026-04-24T05:40:05.413251Z"}]}
+[debug] [2026-04-29T05:42:13.510Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:13.510Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:13.510Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded [none]
+[debug] [2026-04-29T05:42:14.871Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded 200
+[debug] [2026-04-29T05:42:14.871Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded [omitted]
+[info] i  firestore: latest version of firestore.rules already up to date, skipping upload... 
+[info] i  firestore: deploying indexes... 
+[debug] [2026-04-29T05:42:14.874Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:14.874Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:14.875Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2026-04-29T05:42:15.143Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2026-04-29T05:42:15.143Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2026-04-29T05:42:15.143Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:15.143Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:15.144Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* [none]
+[debug] [2026-04-29T05:42:15.399Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* 200
+[debug] [2026-04-29T05:42:15.399Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false OR ttlConfig:* {"fields":[{"name":"projects/carwash-saas-da4b2/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[debug] [2026-04-29T05:42:15.399Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:15.399Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:15.400Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) [none]
+[debug] [2026-04-29T05:42:15.661Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) 200
+[debug] [2026-04-29T05:42:15.661Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default) {"name":"projects/carwash-saas-da4b2/databases/(default)","uid":"8a7328b2-9acd-47be-ad91-e039c6ff2a64","createTime":"2026-04-23T03:17:53.364506Z","updateTime":"2026-04-23T03:17:53.364506Z","locationId":"nam5","type":"FIRESTORE_NATIVE","concurrencyMode":"PESSIMISTIC","versionRetentionPeriod":"3600s","earliestVersionTime":"2026-04-29T04:42:22.521373Z","appEngineIntegrationMode":"DISABLED","keyPrefix":"s","pointInTimeRecoveryEnablement":"POINT_IN_TIME_RECOVERY_DISABLED","deleteProtectionState":"DELETE_PROTECTION_DISABLED","databaseEdition":"STANDARD","freeTier":true,"realtimeUpdatesMode":"REALTIME_UPDATES_MODE_ENABLED","etag":"IKD60f6skpQDMJG8ufaCg5QD"}
+[debug] [2026-04-29T05:42:15.661Z] Creating new index: {"collectionGroup":"bookings","queryScope":"COLLECTION","fields":[{"fieldPath":"businessId","order":"ASCENDING"},{"fieldPath":"createdAt","order":"DESCENDING"}]}
+[debug] [2026-04-29T05:42:15.661Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:15.662Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:15.662Z] >>> [apiv2][query] POST https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/bookings/indexes [none]
+[debug] [2026-04-29T05:42:15.662Z] >>> [apiv2][body] POST https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/bookings/indexes {"fields":[{"fieldPath":"businessId","order":"ASCENDING"},{"fieldPath":"createdAt","order":"DESCENDING"}],"queryScope":"COLLECTION"}
+[debug] [2026-04-29T05:42:16.103Z] <<< [apiv2][status] POST https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/bookings/indexes 200
+[debug] [2026-04-29T05:42:16.103Z] <<< [apiv2][body] POST https://firestore.googleapis.com/v1/projects/carwash-saas-da4b2/databases/(default)/collectionGroups/bookings/indexes {"name":"projects/carwash-saas-da4b2/databases/(default)/operations/S0U0aFhqT2dBQ0lDDCoDIDViNTUyYjg4YmNiMS1lNDc4LWQ4MjQtMGQ2My02MThkYzhmNSQac2VuaWxlcGlwCQpBEg","metadata":{"@type":"type.googleapis.com/google.firestore.admin.v1.IndexOperationMetadata","startTime":"2026-04-29T05:42:22.926290Z","index":"projects/carwash-saas-da4b2/databases/(default)/collectionGroups/bookings/indexes/CICAgOjXh4EK","state":"INITIALIZING"}}
+[info] +  firestore: deployed indexes in firestore.indexes.json successfully for (default) database 
+[debug] [2026-04-29T05:42:16.104Z] [rules] releasing cloud.firestore/(default) with ruleset projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded
+[debug] [2026-04-29T05:42:16.105Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:16.105Z] Checked if tokens are valid: true, expires at: 1777443706642
+[debug] [2026-04-29T05:42:16.106Z] >>> [apiv2][query] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) [none]
+[debug] [2026-04-29T05:42:16.106Z] >>> [apiv2][body] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) {"release":{"name":"projects/carwash-saas-da4b2/releases/cloud.firestore/(default)","rulesetName":"projects/carwash-saas-da4b2/rulesets/ea05fde1-f008-499c-813d-de0759629ded"}}
+[debug] [2026-04-29T05:42:17.603Z] <<< [apiv2][status] PATCH https://firebaserules.googleapis.com/v1/projects/carwash-saas-da4b2/releases/cloud.firestore/(default) 200

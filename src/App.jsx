@@ -49,10 +49,12 @@ function AppRoutes() {
   // Guest — booking page by slug, ?biz=UID, or default
   return (
     <Routes>
+      <Route path="/"           element={<Navigate to="/login" replace />} />
+      <Route path="/login"      element={<LoginPage />} />
       <Route path="/book/:slug" element={<BookingPage />} />
       <Route path="/book"       element={<BookingPage />} />
-      <Route path="/login"      element={<LoginPage />} />
-      <Route path="*"           element={<Navigate to="/book" replace />} />
+      <Route path="/:slug"      element={<BookingPage />} />
+      <Route path="*"           element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }

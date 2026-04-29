@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getBusiness, updateBusiness } from "../services/businessService";
 import { db, storage } from "../services/firebase";
-import { collection, addDoc, getDocs, query, where, deleteDoc, doc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc, Timestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { createWorker } from "tesseract.js";
 import {
@@ -18,6 +18,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LinkIcon from "@mui/icons-material/Link";
 import StorefrontIcon from "@mui/icons-material/Storefront";
@@ -50,7 +51,9 @@ export default function Settings() {
   const PLAN_LIMITS = { starter: 10, pro: 500, enterprise: Infinity };
   const PLAN_LIMIT  = PLAN_LIMITS[plan] ?? 10;
 
-  const [biz, setBiz]           = useState({ name: "", phone: "", address: "", description: "" });
+  const [biz, setBiz]           = useState({ name: "", phone: "", address: "", description: "", slug: "" });
+  const [slugError, setSlugError] = useState("");
+  const [slugSaving, setSlugSaving] = useState(false);
   const [social, setSocial]     = useState(INIT_SOC);
   const [payment, setPayment]   = useState(INIT_PAY);
   const [logoUrl, setLogoUrl]   = useState("");
@@ -60,6 +63,7 @@ export default function Settings() {
   const [displayMode, setDisplayMode] = useState("cards"); // "cards" | "list" | "dropdown"
   const [svcForm, setSvcForm]   = useState(INIT_SVC);
   const [pkgForm, setPkgForm]   = useState(INIT_PKG);
+  const [editSvc, setEditSvc]   = useState(null); // service being edited
   const [svcOpen, setSvcOpen]   = useState(false);
   const [svcTab, setSvcTab]     = useState(0);
   const [ocrImage, setOcrImage] = useState(null);
@@ -71,14 +75,14 @@ export default function Settings() {
   const [toast, setToast]       = useState({ open: false, msg: "", severity: "success" });
   const fileRef = useRef();
 
-  const bookingLink = `${window.location.origin}/book/${business?.slug || `?biz=${uid}`}`;
+  const bookingLink = `${window.location.origin}/book/${biz.slug || business?.slug || uid}`;
   const showToast   = (msg, severity = "success") => setToast({ open: true, msg, severity });
 
   useEffect(() => {
     if (!uid) return;
     getBusiness(uid).then((data) => {
       if (!data) return;
-      setBiz({ name: data.name || "", phone: data.phone || "", address: data.address || "", description: data.description || "" });
+      setBiz({ name: data.name || "", phone: data.phone || "", address: data.address || "", description: data.description || "", slug: data.slug || "" });
       if (data.businessHours) setHours(data.businessHours);
       if (data.logoUrl)       setLogoUrl(data.logoUrl);
       if (data.social)        setSocial({ ...INIT_SOC, ...data.social });
@@ -117,6 +121,26 @@ export default function Settings() {
     setSaving(false);
   };
 
+  const toSlug = (val) => val.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+  const saveSlug = async () => {
+    const slug = biz.slug.trim();
+    if (!slug) { setSlugError("Slug cannot be empty"); return; }
+    if (!/^[a-z0-9-]+$/.test(slug)) { setSlugError("Only lowercase letters, numbers, and hyphens"); return; }
+    setSlugSaving(true);
+    setSlugError("");
+    try {
+      // Check uniqueness
+      const { getBusinessBySlug: checkSlug } = await import("../services/businessService");
+      const existing = await checkSlug(slug);
+      if (existing && existing.id !== uid) { setSlugError("This slug is already taken"); return; }
+      await updateBusiness(uid, { slug });
+      await refreshBusiness();
+      showToast("Booking link updated!");
+    } catch { showToast("Failed to save slug", "error"); }
+    finally { setSlugSaving(false); }
+  };
+
   const toggleDay = (day) => setHours((h) => ({ ...h, [day]: { ...h[day], open: !h[day].open } }));
   const setTime   = (day, f) => (e) => setHours((h) => ({ ...h, [day]: { ...h[day], [f]: e.target.value } }));
   const saveHours = async () => {
@@ -145,6 +169,18 @@ export default function Settings() {
     await deleteDoc(doc(db, "services", id));
     setServices((prev) => prev.filter((s) => s.id !== id));
     showToast("Deleted", "info");
+  };
+
+  const saveEditSvc = async () => {
+    if (!editSvc) return;
+    const { id, name, price, duration, sizes, inclusions } = editSvc;
+    const update = editSvc.isPackage
+      ? { name, sizes, inclusions }
+      : { name, price: parseFloat(price), duration };
+    await updateDoc(doc(db, "services", id), update);
+    setEditSvc(null);
+    loadServices();
+    showToast("Service updated!");
   };
 
   const handleOcrUpload = async (e) => {
@@ -204,7 +240,7 @@ export default function Settings() {
   const copyLink = () => { navigator.clipboard.writeText(bookingLink); showToast("Booking link copied!"); };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 720 }}>
+    <Box sx={{ p: { xs: 2, sm: 4 }, maxWidth: 720 }}>
       <Typography variant="h5" fontWeight={700} mb={3}>Settings</Typography>
 
       {/* Account */}
@@ -485,17 +521,51 @@ export default function Settings() {
       </Card>
 
       {/* Booking Link */}
-      <Card sx={{ boxShadow: 1, mb: 3 }}>
-        <CardHeader avatar={<LinkIcon color="primary" />} title="Shareable Booking Link"
-          subheader="Share with your customers" titleTypographyProps={{ fontWeight: 700, fontSize: 16 }} />
-        <Divider />
-        <CardContent>
-          <TextField fullWidth size="small" value={bookingLink}
-            InputProps={{ readOnly: true, endAdornment: (
-              <InputAdornment position="end">
-                <Tooltip title="Copy"><IconButton onClick={copyLink} size="small"><ContentCopyIcon fontSize="small" /></IconButton></Tooltip>
-              </InputAdornment>
-            )}} />
+      <Card sx={{ boxShadow: 1, mb: 3, border: "1.5px solid", borderColor: "primary.light" }}>
+        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+          <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+            <LinkIcon color="primary" fontSize="small" />
+            <Typography fontWeight={700} fontSize={15}>Shareable Booking Link</Typography>
+          </Stack>
+          <Typography fontSize={12} color="text.secondary" mb={2}>
+            Send this link to your customers so they can book directly with{" "}
+            <strong>{biz.name || "your business"}</strong>.
+          </Typography>
+
+          {/* Slug editor */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1} mb={2} alignItems="flex-start">
+            <TextField
+              size="small" fullWidth
+              label="Your booking URL name"
+              value={biz.slug}
+              onChange={(e) => { setBiz((b) => ({ ...b, slug: toSlug(e.target.value) })); setSlugError(""); }}
+              error={!!slugError}
+              helperText={slugError || `yoursite.com/book/${biz.slug || "your-name"}`}
+              InputProps={{ startAdornment: <InputAdornment position="start"><Typography fontSize={12} color="text.disabled">/book/</Typography></InputAdornment> }}
+              placeholder="patrick-carwash"
+            />
+            <Button variant="contained" onClick={saveSlug} disabled={slugSaving}
+              sx={{ whiteSpace: "nowrap", minWidth: 100, mt: { xs: 0, sm: "2px" } }}>
+              {slugSaving ? "Saving..." : "Save"}
+            </Button>
+          </Stack>
+
+          {/* Link display */}
+          <Box sx={{ bgcolor: "grey.50", border: "1px solid", borderColor: "divider", borderRadius: 2, px: 2, py: 1.5, mb: 2, wordBreak: "break-all" }}>
+            <Typography fontSize={13} color="primary.main" fontWeight={500}>{bookingLink}</Typography>
+          </Box>
+
+          {/* Action buttons — stacked on mobile */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
+            <Button variant="contained" fullWidth startIcon={<ContentCopyIcon />} onClick={copyLink}>
+              Copy Link
+            </Button>
+            <Button variant="outlined" fullWidth startIcon={<WhatsAppIcon sx={{ color: "#25d366" }} />}
+              href={`https://wa.me/?text=${encodeURIComponent("Book your car wash here: " + bookingLink)}`}
+              target="_blank">
+              Share via WhatsApp
+            </Button>
+          </Stack>
         </CardContent>
       </Card>
 
@@ -559,6 +629,9 @@ export default function Settings() {
                         }
                       </TableCell>
                       <TableCell align="right">
+                        <Tooltip title="Edit">
+                          <IconButton size="small" color="primary" onClick={() => setEditSvc({ ...s })}><EditIcon fontSize="small" /></IconButton>
+                        </Tooltip>
                         <Tooltip title="Delete">
                           <IconButton size="small" color="error" onClick={() => deleteService(s.id)}><DeleteIcon fontSize="small" /></IconButton>
                         </Tooltip>
@@ -677,6 +750,47 @@ export default function Settings() {
           {svcTab === 0 && <Button variant="contained" onClick={addService}>Add Service</Button>}
           {svcTab === 1 && <Button variant="contained" onClick={addPackage}>Add Package</Button>}
           {svcTab === 2 && ocrParsed.length > 0 && <Button variant="contained" onClick={saveOcrServices}>Save {ocrParsed.length} Services</Button>}
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit Service Dialog */}
+      <Dialog open={!!editSvc} onClose={() => setEditSvc(null)} maxWidth="sm" fullWidth>
+        <DialogTitle fontWeight={700}>Edit {editSvc?.isPackage ? "Package" : "Service"}</DialogTitle>
+        <DialogContent>
+          {editSvc && (
+            <Stack spacing={2} mt={1}>
+              <TextField label="Name" size="small" fullWidth value={editSvc.name}
+                onChange={(e) => setEditSvc((s) => ({ ...s, name: e.target.value }))} />
+
+              {editSvc.isPackage ? (
+                <>
+                  <TextField label="Inclusions (one per line)" size="small" fullWidth multiline rows={3}
+                    value={Array.isArray(editSvc.inclusions) ? editSvc.inclusions.join("\n") : editSvc.inclusions || ""}
+                    onChange={(e) => setEditSvc((s) => ({ ...s, inclusions: e.target.value.split("\n").map((l) => l.trim()).filter(Boolean) }))} />
+                  <Typography fontSize={13} fontWeight={600} color="text.secondary">Price per Vehicle Size (₱)</Typography>
+                  <Stack direction="row" flexWrap="wrap" gap={1.5}>
+                    {Object.keys(editSvc.sizes || {}).map((size) => (
+                      <TextField key={size} label={size} type="number" size="small" sx={{ width: 120 }}
+                        value={editSvc.sizes[size] ?? ""}
+                        onChange={(e) => setEditSvc((s) => ({ ...s, sizes: { ...s.sizes, [size]: e.target.value === "" ? "" : parseFloat(e.target.value) } }))} />
+                    ))}
+                  </Stack>
+                  <Typography fontSize={12} color="text.secondary">Leave blank to remove a size option.</Typography>
+                </>
+              ) : (
+                <Stack direction="row" spacing={2}>
+                  <TextField label="Price (₱)" type="number" size="small" fullWidth value={editSvc.price ?? ""}
+                    onChange={(e) => setEditSvc((s) => ({ ...s, price: e.target.value }))} />
+                  <TextField label="Duration" size="small" fullWidth value={editSvc.duration ?? ""}
+                    onChange={(e) => setEditSvc((s) => ({ ...s, duration: e.target.value }))} />
+                </Stack>
+              )}
+            </Stack>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => setEditSvc(null)}>Cancel</Button>
+          <Button variant="contained" onClick={saveEditSvc}>Save Changes</Button>
         </DialogActions>
       </Dialog>
 

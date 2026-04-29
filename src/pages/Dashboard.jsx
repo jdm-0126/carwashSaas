@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { getBookingsByBusiness, updateBookingStatus } from "../services/bookingService";
+import { updateBookingStatus } from "../services/bookingService";
 import { useAuth } from "../context/AuthContext";
+import { db } from "../services/firebase";
+import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
 import {
   Box, Typography, Card, CardContent, Chip, Stack,
   CircularProgress, Avatar, Tabs, Tab, MenuItem,
@@ -49,12 +51,22 @@ export default function Dashboard() {
 
   const load = () => {
     if (!businessId) { setLoading(false); return; }
-    getBookingsByBusiness(businessId)
-      .then(setBookings)
-      .finally(() => setLoading(false));
+    const q = query(
+      collection(db, "bookings"),
+      where("businessId", "==", businessId),
+      orderBy("createdAt", "desc")
+    );
+    const unsub = onSnapshot(q, (snap) => {
+      setBookings(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setLoading(false);
+    });
+    return unsub;
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    const unsub = load();
+    return () => unsub?.();
+  }, [businessId]);
 
   const handleStatusChange = async (bookingId, status) => {
     await updateBookingStatus(bookingId, status);
@@ -66,7 +78,7 @@ export default function Dashboard() {
     ? bookings
     : bookings.filter((b) => b.status === filter);
 
-  const sorted     = filtered.sort((a, b) => (b.createdAt?.seconds ?? 0) - (a.createdAt?.seconds ?? 0));
+  const sorted     = filtered;
   const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
   const paginated  = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -183,7 +195,7 @@ export default function Dashboard() {
 
                     <Stack alignItems="flex-end" spacing={1}>
                       <Typography fontSize={13} fontWeight={500} color="primary.main">
-                        {SERVICE_LABELS[b.serviceId] || b.serviceId}
+                        {b.serviceName || b.serviceId}
                       </Typography>
                       {/* Owner can change status manually */}
                       <FormControl size="small">

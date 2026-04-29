@@ -9,7 +9,7 @@ import {
   Box, Typography, Card, CardContent, Avatar, TextField,
   Button, Stack, Link, Chip, Divider, Radio, RadioGroup,
   FormControlLabel, FormControl, MenuItem, Select, InputLabel,
-  Tooltip, IconButton, Alert,
+  Tooltip, IconButton, Alert, Dialog, DialogContent,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LoginIcon from "@mui/icons-material/Login";
@@ -22,15 +22,10 @@ import LanguageIcon from "@mui/icons-material/Language";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-const BASE = ["Wash","Vacuum","Dashboard Protection / Armor All","Glass Cleaner","Engine Bay Wiping","Clean Fuel Cover","Pedal Cleaning"];
-
-const DEFAULT_PACKAGES = [
-  { id:"pkg1", name:"Premium Wash & Hand Wax",                        extra:["Hand Wax"],                          sizes:{"Sub-Compact":450,"Small":550,"Medium":650,"Large":750,"X-Large":850} },
-  { id:"pkg2", name:"Premium Wash & Acid Rain Removal",               extra:["Acid Rain Removal"],                 sizes:{"Sub-Compact":500,"Small":550,"Medium":650,"Large":700,"X-Large":850} },
-  { id:"pkg3", name:"Premium Wash & Engine Wash",                     extra:["Full Engine Wash"],                  sizes:{"Sub-Compact":600,"Small":700,"Medium":800,"Large":900,"X-Large":950} },
-  { id:"pkg4", name:"Premium Wash & Buffing Wax",                     extra:["Buffing Wax"],                       sizes:{"Sub-Compact":650,"Small":800,"Medium":900,"Large":1000,"X-Large":1150} },
-  { id:"pkg5", name:"Premium Wash, Hand Wax & Acid Rain Removal",     extra:["Hand Wax","Acid Rain Removal"],      sizes:{"Sub-Compact":650,"Small":750,"Medium":850,"Large":1000,"X-Large":1150} },
-];
+const checkIcon = <CheckIcon sx={{ fontSize: "12px !important" }} />;
+const InclusionChip = ({ label }) => (
+  <Chip label={label} size="small" icon={checkIcon} variant="outlined" color="primary" sx={{ fontSize: 10 }} />
+);
 
 // Generate 30-min time slots between from and to (e.g. "08:00" to "18:00")
 const generateSlots = (from, to) => {
@@ -64,13 +59,16 @@ export default function BookingPage() {
   const [errors, setErrors]     = useState({});
   const [business, setBusiness] = useState(null);
   const [businessHours, setBusinessHours] = useState(null);
-  const [packages, setPackages] = useState(DEFAULT_PACKAGES);
+  const [packages, setPackages] = useState([]);
+  const [baseInclusions, setBaseInclusions] = useState([]);
   const [displayMode, setDisplayMode] = useState("cards");
   const [blockedSlots, setBlockedSlots] = useState([]);
   const [paymentFile, setPaymentFile]   = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [paymentPreview, setPaymentPreview] = useState("");
   const paymentRef = useRef();
+
+  const [step, setStep] = useState("packages"); // mobile step: "packages" | "form"
 
   const { business: ownerBusiness } = useAuth();
 
@@ -82,8 +80,9 @@ export default function BookingPage() {
       else if (ownerBusiness)    data = ownerBusiness; // owner previewing their own booking page
       if (!data) return;
       setBusiness(data);
-      if (data.businessHours) setBusinessHours(data.businessHours);
-      if (data.displayMode)   setDisplayMode(data.displayMode);
+      if (data.businessHours)   setBusinessHours(data.businessHours);
+      if (data.displayMode)      setDisplayMode(data.displayMode);
+      if (data.baseInclusions)   setBaseInclusions(data.baseInclusions);
       const snap = await getDocs(query(collection(db, "services"), where("businessId", "==", data.id)));
       if (!snap.empty) setPackages(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
     };
@@ -102,16 +101,23 @@ export default function BookingPage() {
   }, [form.date, business?.id]);
 
   const getTimeConstraints = () => {
-    if (!businessHours || !form.date) return {};
+    if (!form.date) return {};
+    if (!businessHours) return { min: "08:00", max: "18:00" };
     const dh = businessHours[DAYS[new Date(form.date + "T00:00:00").getDay()]];
-    if (!dh?.open) return { disabled: true };
+    if (!dh || !dh.open) return { disabled: true };
     return { min: dh.from, max: dh.to };
   };
   const tc = getTimeConstraints();
 
   const set = (field) => (e) => {
     let val = e.target.value;
-    if (field === "phone" && val && !val.startsWith("+")) val = "+63" + val.replace(/^0/, "");
+    if (field === "phone") {
+      const digits = val.replace(/\D/g, "");
+      const capped = digits.startsWith("63") ? digits.slice(0, 12) : ("63" + digits.replace(/^0/, "")).slice(0, 12);
+      val = "+" + capped;
+      if (val === "+") val = "";
+    }
+    if (field === "customerName") val = val.replace(/[^a-zA-Z\s.'-]/g, "");
     setForm((f) => ({ ...f, [field]: val }));
   };
 
@@ -121,7 +127,7 @@ export default function BookingPage() {
     if (selectedPkg?.sizes && !form.vehicleSize)   e.vehicleSize  = "Select vehicle size";
     if (!form.customerName.trim())                 e.customerName = "Required";
     if (!form.phone.trim())                        e.phone        = "Required";
-    else if (!/^\+639\d{9}$/.test(form.phone))     e.phone        = "+639XXXXXXXXX";
+    else if (form.phone.replace(/\D/g,"").length < 11) e.phone   = "+639XXXXXXXXX";
     if (!form.date)                                e.date         = "Required";
     if (!form.time)                                e.time         = "Required";
     if (tc.disabled)                               e.time         = "Closed this day";
@@ -132,13 +138,12 @@ export default function BookingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) { setErrors(errs); window.scrollTo(0,0); return; }
     setErrors({});
     setLoading(true);
     try {
       let proofUrl = null;
       const bizId  = business?.id || bizParam || "";
-      // Upload payment proof if provided
       if (paymentFile) {
         const tempRef = "SZ-" + Date.now().toString(36).toUpperCase().slice(-6);
         proofUrl = await uploadPaymentProof(bizId, tempRef, paymentFile);
@@ -157,6 +162,7 @@ export default function BookingPage() {
       setDone(true);
     } catch (err) {
       if (err.message?.startsWith("PLAN_LIMIT")) setLimitReached(true);
+      else setErrors((prev) => ({ ...prev, submit: "Something went wrong. Please try again." }));
     } finally { setLoading(false); }
   };
 
@@ -187,95 +193,31 @@ export default function BookingPage() {
     </Box>
   );
 
-  // ── Success ─────────────────────────────────────────────────────
-  if (done) return (
-    <Box sx={{ minHeight:"100vh", bgcolor:"grey.50", display:"flex", flexDirection:"column" }}>
-      {/* Same top bar */}
-      <Box sx={{ bgcolor:"white", borderBottom:"1px solid", borderColor:"divider", px:3, py:1.5 }}>
-        <Stack direction="row" alignItems="center" gap={1.5}>
-          {business?.logoUrl
-            ? <Avatar src={business.logoUrl} sx={{ width:36, height:36 }} />
-            : <Avatar sx={{ width:36, height:36, bgcolor:"primary.main" }}><LocalCarWashIcon fontSize="small" /></Avatar>
-          }
-          <Box>
-            <Typography fontWeight={700} fontSize={14}>{business?.name || "Sudz Saas Pro"}</Typography>
-            <Typography fontSize={11} color="text.secondary">{business?.description || "Premium Carwash"}</Typography>
-          </Box>
-        </Stack>
-      </Box>
-
-      <Box sx={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", p:2 }}>
-        <Card sx={{ width:"100%", maxWidth:440, boxShadow:3 }}>
-          <CardContent sx={{ p:{ xs:2.5, sm:4 } }}>
-            {/* Header */}
-            <Stack alignItems="center" mb={3}>
-              <Box sx={{ width:64, height:64, borderRadius:"50%", bgcolor:"success.light", display:"flex", alignItems:"center", justifyContent:"center", mb:1.5 }}>
-                <CheckCircleIcon sx={{ fontSize:36, color:"success.main" }} />
-              </Box>
-              <Typography fontWeight={800} fontSize={20}>Booking Confirmed!</Typography>
-              <Typography fontSize={13} color="text.secondary" mt={0.5}>Thank you, {form.customerName.split(" ")[0]}!</Typography>
-            </Stack>
-
-            {/* Reference number — prominent */}
-            <Box sx={{ bgcolor:"#f0f7ff", border:"2px dashed #2563eb", borderRadius:2, p:2, mb:3, textAlign:"center" }}>
-              <Typography fontSize={11} fontWeight={700} color="primary.main" letterSpacing={1.5} mb={0.5}>BOOKING REFERENCE</Typography>
-              <Typography fontSize={28} fontWeight={900} color="primary.main" letterSpacing={3} sx={{ fontFamily:"monospace" }}>{refNumber}</Typography>
-              <Typography fontSize={11} color="text.disabled" mt={0.5}>Show this to the staff upon arrival</Typography>
-            </Box>
-
-            {/* Booking summary */}
-            <Stack spacing={0} sx={{ bgcolor:"grey.50", borderRadius:2, overflow:"hidden", mb:3 }}>
-              {[
-                { label:"Service",  value: selectedPkg?.name },
-                { label:"Vehicle",  value: form.vehicleSize || "—" },
-                { label:"Amount",   value: selectedPrice ? `₱${selectedPrice.toLocaleString()}` : "—" },
-                { label:"Date",     value: form.date },
-                { label:"Time",     value: form.time },
-                { label:"Contact",  value: form.phone },
-              ].map(({ label, value }, i, arr) => (
-                <Stack key={label} direction="row" justifyContent="space-between" alignItems="center"
-                  sx={{ px:2, py:1.2, borderBottom: i < arr.length-1 ? "1px solid" : "none", borderColor:"divider" }}>
-                  <Typography fontSize={12} color="text.secondary" fontWeight={500}>{label}</Typography>
-                  <Typography fontSize={13} fontWeight={600} sx={{ textAlign:"right", maxWidth:220 }}>{value}</Typography>
-                </Stack>
-              ))}
-            </Stack>
-
-            {/* SMS note */}
-            <Box sx={{ bgcolor:"warning.50", border:"1px solid", borderColor:"warning.light", borderRadius:1.5, px:2, py:1.2, mb:3 }}>
-              <Typography fontSize={12} color="warning.dark">
-                📱 SMS confirmation coming soon — please screenshot this page for your records.
-              </Typography>
-            </Box>
-
-            {/* Actions */}
-            <Stack spacing={1.5}>
-              <Button variant="contained" fullWidth size="large"
-                onClick={() => { setDone(false); setForm(INIT); setRefNumber(""); }}>
-                Book Another Service
-              </Button>
-              {business?.social?.whatsapp && (
-                <Button variant="outlined" fullWidth size="large" color="success"
-                  href={`https://wa.me/${business.social.whatsapp.replace(/\D/g,"")}?text=${encodeURIComponent(`Hi! My booking ref is ${refNumber} — ${selectedPkg?.name} on ${form.date} at ${form.time}`)}`}
-                  target="_blank">
-                  💬 Message Us on WhatsApp
-                </Button>
-              )}
-            </Stack>
-          </CardContent>
-        </Card>
-      </Box>
-    </Box>
-  );
+  const handleConfirmClose = () => {
+    setDone(false);
+    setForm(INIT);
+    setRefNumber("");
+    setPaymentFile(null);
+    setPaymentPreview("");
+    setPaymentMethod("");
+    setStep("packages");
+  };
 
   // ── Single screen ────────────────────────────────────────────────
   return (
     <Box sx={{ minHeight:"100vh", bgcolor:"grey.50", display:"flex", flexDirection:"column" }}>
 
       {/* Top bar */}
-      <Box sx={{ bgcolor:"white", borderBottom:"1px solid", borderColor:"divider", px:3, py:1.5 }}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Box sx={{ bgcolor:"white", borderBottom:"1px solid", borderColor:"divider", px:2, py:1.5 }}>
+        <Stack direction="row" alignItems="center" width="100%">
+        <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
           <Stack direction="row" alignItems="center" gap={1.5}>
+            {/* Back button — mobile form step only */}
+            {step === "form" && (
+              <IconButton size="small" onClick={() => setStep("packages")} sx={{ display:{ md:"none" }, mr:0.5 }}>
+                <Typography fontSize={18}>←</Typography>
+              </IconButton>
+            )}
             {business?.logoUrl
               ? <Avatar src={business.logoUrl} sx={{ width:40, height:40 }} />
               : <Avatar sx={{ width:40, height:40, bgcolor:"primary.main" }}><LocalCarWashIcon fontSize="small" /></Avatar>
@@ -285,7 +227,6 @@ export default function BookingPage() {
               <Typography fontSize={11} color="text.secondary">{business?.description || "Premium Carwash"}</Typography>
             </Box>
           </Stack>
-          {/* Social + contact icons */}
           <Stack direction="row" spacing={0.5} alignItems="center">
             {business?.phone && <Tooltip title={business.phone}><IconButton size="small" href={`tel:${business.phone}`}><PhoneIcon sx={{ fontSize:16, color:"text.secondary" }} /></IconButton></Tooltip>}
             {business?.address && <Tooltip title={business.address}><IconButton size="small"><LocationOnIcon sx={{ fontSize:16, color:"text.secondary" }} /></IconButton></Tooltip>}
@@ -293,25 +234,42 @@ export default function BookingPage() {
             {business?.social?.instagram && <IconButton size="small" href={business.social.instagram} target="_blank"><InstagramIcon sx={{ fontSize:16, color:"#e1306c" }} /></IconButton>}
             {business?.social?.whatsapp && <IconButton size="small" href={`https://wa.me/${business.social.whatsapp.replace(/\D/g,"")}`} target="_blank"><WhatsAppIcon sx={{ fontSize:16, color:"#25d366" }} /></IconButton>}
             {business?.social?.website && <IconButton size="small" href={business.social.website} target="_blank"><LanguageIcon sx={{ fontSize:16, color:"#2563eb" }} /></IconButton>}
+            {/* Next button — mobile packages step only, pinned to far right */}
+            {step === "packages" && form.packageId && (
+              <Button size="small" variant="contained" onClick={() => setStep("form")}
+                sx={{ display:{ md:"none" }, fontSize:12, px:2, py:0.6, ml:1 }}>
+                Next →
+              </Button>
+            )}
           </Stack>
+        </Stack>
         </Stack>
       </Box>
 
       {/* Body */}
-      <Box sx={{ flex:1, display:"flex", overflow:"hidden", maxHeight:"calc(100vh - 60px)" }}>
+      <Box sx={{ flex:1, display:"flex", flexDirection:{ xs:"column", md:"row" }, overflow:"hidden", height:{ md:"calc(100vh - 61px)" } }}>
 
-        {/* LEFT — packages */}
-        <Box sx={{ width:{ xs:"100%", md:420 }, overflowY:"auto", borderRight:"1px solid", borderColor:"divider", bgcolor:"white", p:2 }}>
+        {/* LEFT — packages (hidden on mobile when on form step) */}
+        <Box sx={{
+          width:{ xs:"100%", md:420 }, flexShrink:0,
+          display:{ xs: step==="packages" ? "flex" : "none", md:"flex" },
+          flexDirection:"column",
+          overflowY:"auto", overflowX:"hidden",
+          borderRight:{ md:"1px solid" }, borderColor:"divider",
+          bgcolor:"white", p:2,
+          height:{ xs:"calc(100vh - 61px)", md:"auto" },
+        }}>
 
           {/* Base inclusions */}
-          <Typography fontSize={11} fontWeight={700} color="text.secondary" letterSpacing={0.5} mb={1}>ALL PACKAGES INCLUDE</Typography>
-          <Stack direction="row" flexWrap="wrap" gap={0.5} mb={2}>
-            {BASE.map((b) => (
-              <Chip key={b} label={b} size="small" icon={<CheckIcon sx={{ fontSize:"12px !important" }} />}
-                variant="outlined" color="primary" sx={{ fontSize:10 }} />
-            ))}
-          </Stack>
-          <Divider sx={{ mb:2 }} />
+          {baseInclusions.length > 0 && (
+            <>
+              <Typography fontSize={11} fontWeight={700} color="text.secondary" letterSpacing={0.5} mb={1}>ALL PACKAGES INCLUDE</Typography>
+              <Stack direction="row" flexWrap="wrap" gap={0.5} mb={2}>
+                {baseInclusions.map((b) => <InclusionChip key={b} label={b} />)}
+              </Stack>
+              <Divider sx={{ mb:2 }} />
+            </>
+          )}
 
           {/* DROPDOWN mode */}
           {displayMode === "dropdown" && (
@@ -394,7 +352,7 @@ export default function BookingPage() {
                       </Stack>
                       <Typography fontWeight={600} fontSize={13} mb={1}>{pkg.name}</Typography>
                       <Stack direction="row" sx={{ flexWrap:"wrap" }} gap={0.5} mb={1}>
-                        {(pkg.extra || pkg.inclusions?.filter((x) => !BASE.includes(x)) || []).map((inc) => (
+                        {(pkg.extra || pkg.inclusions?.filter((x) => !baseInclusions.includes(x)) || []).map((inc) => (
                           <Chip key={inc} label={inc} size="small" color="success" variant="outlined" sx={{ fontSize:10, height:18 }} />
                         ))}
                       </Stack>
@@ -428,8 +386,14 @@ export default function BookingPage() {
           )}
         </Box>
 
-        {/* RIGHT — booking form */}
-        <Box sx={{ flex:1, overflowY:"auto", p:3, display:{ xs:"none", md:"block" } }}>
+        {/* RIGHT — booking form (hidden on mobile when on packages step) */}
+        <Box sx={{
+          flex:1,
+          display:{ xs: step==="form" ? "flex" : "none", md:"flex" },
+          flexDirection:"column",
+          overflowY:"auto", p:{ xs:2, md:3 },
+          height:{ xs:"calc(100vh - 61px)", md:"auto" },
+        }}>
           <Typography fontWeight={700} fontSize={16} mb={2}>Your Booking Details</Typography>
 
           {/* Selected summary */}
@@ -448,7 +412,8 @@ export default function BookingPage() {
 
           {!form.packageId && (
             <Box sx={{ textAlign:"center", py:4, color:"text.disabled" }}>
-              <Typography fontSize={32}>👈</Typography>
+              <Typography fontSize={32} sx={{ display:{ xs:"none", md:"block" } }}>👈</Typography>
+              <Typography fontSize={32} sx={{ display:{ xs:"block", md:"none" } }}>👆</Typography>
               <Typography fontSize={13} mt={1}>Select a package to continue</Typography>
             </Box>
           )}
@@ -461,8 +426,10 @@ export default function BookingPage() {
                     value={form.customerName} onChange={set("customerName")}
                     error={!!errors.customerName} helperText={errors.customerName} />
                   <TextField label="Phone" fullWidth size="small"
-                    value={form.phone} onChange={set("phone")}
-                    placeholder="+639XXXXXXXXX" inputProps={{ maxLength:13 }}
+                    value={form.phone}
+                    onChange={set("phone")}
+                    type="tel"
+                    inputProps={{ maxLength:13, inputMode:"numeric" }}
                     error={!!errors.phone} helperText={errors.phone || "+63 format"} />
                 </Stack>
 
@@ -592,6 +559,10 @@ export default function BookingPage() {
                   </Alert>
                 )}
 
+                {errors.submit && (
+                  <Alert severity="error" sx={{ fontSize:12 }}>{errors.submit}</Alert>
+                )}
+
                 <Button type="submit" variant="contained" fullWidth size="large" disabled={loading || (selectedPkg?.sizes && !form.vehicleSize)}>
                   {loading ? "Submitting..." : selectedPrice ? `Book Now · ₱${selectedPrice.toLocaleString()}` : "Book Now"}
                 </Button>
@@ -607,19 +578,59 @@ export default function BookingPage() {
         </Box>
       </Box>
 
-      {/* Mobile: sticky bottom form trigger */}
-      <Box sx={{ display:{ xs:"block", md:"none" }, position:"sticky", bottom:0, bgcolor:"white",
-        borderTop:"1px solid", borderColor:"divider", p:2 }}>
-        {form.packageId && form.vehicleSize && form.time ? (
-          <Button variant="contained" fullWidth size="large" onClick={handleSubmit} disabled={loading}>
-            {loading ? "Submitting..." : `Book Now · ₱${selectedPrice?.toLocaleString()}`}
-          </Button>
-        ) : (
-          <Typography fontSize={13} color="text.secondary" textAlign="center">
-            {!form.packageId ? "Select a package" : !form.vehicleSize ? "Select vehicle size" : "Select a time slot"}
-          </Typography>
-        )}
-      </Box>
+      {/* Confirmation Dialog */}
+      <Dialog open={done} maxWidth="xs" fullWidth>
+        <DialogContent sx={{ p:{ xs:3, sm:4 } }}>
+          {/* Header */}
+          <Stack alignItems="center" mb={3}>
+            <Box sx={{ width:60, height:60, borderRadius:"50%", bgcolor:"success.light", display:"flex", alignItems:"center", justifyContent:"center", mb:1.5 }}>
+              <CheckCircleIcon sx={{ fontSize:34, color:"success.main" }} />
+            </Box>
+            <Typography fontWeight={800} fontSize={20}>Booking Confirmed!</Typography>
+            <Typography fontSize={13} color="text.secondary" mt={0.5}>Thank you, {form.customerName.split(" ")[0]}!</Typography>
+          </Stack>
+
+          {/* Reference number */}
+          <Box sx={{ bgcolor:"#f0f7ff", border:"2px dashed #2563eb", borderRadius:2, p:2, mb:3, textAlign:"center" }}>
+            <Typography fontSize={11} fontWeight={700} color="primary.main" letterSpacing={1.5} mb={0.5}>BOOKING REFERENCE</Typography>
+            <Typography fontSize={28} fontWeight={900} color="primary.main" letterSpacing={4} sx={{ fontFamily:"monospace" }}>{refNumber}</Typography>
+            <Typography fontSize={11} color="text.disabled" mt={0.5}>Show this to the staff upon arrival</Typography>
+          </Box>
+
+          {/* Booking summary */}
+          <Box sx={{ border:"1px solid", borderColor:"divider", borderRadius:2, overflow:"hidden", mb:3 }}>
+            {[
+              { label:"Service", value: selectedPkg?.name },
+              { label:"Vehicle", value: form.vehicleSize || "—" },
+              { label:"Amount",  value: selectedPrice ? `₱${selectedPrice.toLocaleString()}` : "—" },
+              { label:"Date",    value: form.date },
+              { label:"Time",    value: form.time },
+            ].map(({ label, value }, i, arr) => (
+              <Stack key={label} direction="row" justifyContent="space-between" alignItems="center"
+                sx={{ px:2, py:1.5, bgcolor: i % 2 === 0 ? "grey.50" : "white",
+                  borderBottom: i < arr.length - 1 ? "1px solid" : "none", borderColor:"divider" }}>
+                <Typography fontSize={13} color="text.secondary" fontWeight={500}>{label}</Typography>
+                <Typography fontSize={13} fontWeight={700} sx={{ textAlign:"right", maxWidth:200 }}>{value}</Typography>
+              </Stack>
+            ))}
+          </Box>
+
+          {/* Actions */}
+          <Stack spacing={1.5}>
+            <Button variant="contained" fullWidth size="large" onClick={handleConfirmClose}>
+              OK — Book Another
+            </Button>
+            {business?.social?.whatsapp && (
+              <Button variant="outlined" fullWidth color="success"
+                href={`https://wa.me/${business.social.whatsapp.replace(/\D/g,"")}?text=${encodeURIComponent(`Hi! My booking ref is ${refNumber} — ${selectedPkg?.name} on ${form.date} at ${form.time}`)}`}
+                target="_blank">
+                💬 Message on WhatsApp
+              </Button>
+            )}
+          </Stack>
+        </DialogContent>
+      </Dialog>
+
     </Box>
   );
 }
