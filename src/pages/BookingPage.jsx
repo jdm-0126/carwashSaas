@@ -370,15 +370,15 @@ export default function BookingPage() {
             {business?.social?.facebook && <IconButton size="small" href={business.social.facebook} target="_blank"><FacebookIcon sx={{ fontSize:16, color:"#1877f2" }} /></IconButton>}
             {business?.social?.instagram && <IconButton size="small" href={business.social.instagram} target="_blank"><InstagramIcon sx={{ fontSize:16, color:"#e1306c" }} /></IconButton>}
             {business?.social?.whatsapp && <IconButton size="small" href={`https://wa.me/${business.social.whatsapp.replace(/\D/g,"")}`} target="_blank"><WhatsAppIcon sx={{ fontSize:16, color:"#25d366" }} /></IconButton>}
-            {business?.social?.website && <IconButton size="small" href={business.social.website} target="_blank"><LanguageIcon sx={{ fontSize:16, color:"#2563eb" }} /></IconButton>}
-            {/* Next button — mobile packages step only, pinned to far right */}
-            {step === "packages" && form.packageId && (
+            {business?.social?.website && <IconButton size="small" href={business.social.website} target="_blank"><LanguageIcon sx={{ fontSize:16, color:"#2563eb" }} /></IconButton>}            
+          </Stack>
+           {/* Next button — mobile packages step only, pinned to far right */}
+          {step === "packages" && form.packageId && (
               <Button size="small" variant="contained" onClick={() => setStep("form")}
                 sx={{ display:{ md:"none" }, fontSize:12, px:2, py:0.6, ml:1 }}>
                 Next →
               </Button>
             )}
-          </Stack>
         </Stack>
         </Stack>
       </Box>
@@ -650,11 +650,11 @@ export default function BookingPage() {
             </Box>
           )}
 
-          <Stack direction="row" justifyContent="center" alignItems="center" mt={3} spacing={0.5}>
+          {/* <Stack direction="row" justifyContent="center" alignItems="center" mt={3} spacing={0.5}>
             <LoginIcon sx={{ fontSize:13, color:"text.disabled" }} />
             <Link component="button" variant="body2" color="text.disabled" underline="hover" fontSize={11}
               onClick={() => navigate("/login")}>Owner login</Link>
-          </Stack>
+          </Stack> */}
         </Box>
       </Box>
 
